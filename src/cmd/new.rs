@@ -1,6 +1,6 @@
 use crate::prelude::*;
 use structopt::StructOpt;
-use super::Context;
+use super::CommandContext;
 
 use crate::package::Package;
 
@@ -10,7 +10,7 @@ pub struct Opt {
     name: String,
 }
 
-pub fn run(ctx: Context, opt: Opt) -> Result<()> {
+pub fn run(ctx: CommandContext, opt: Opt) -> Result<()> {
     let package = Package::new(ctx.package_dir(), opt.name)?;
 
     info!("created package {} at {}", &package, package.dir.display());

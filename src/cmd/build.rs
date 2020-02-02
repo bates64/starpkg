@@ -1,13 +1,13 @@
 use crate::prelude::*;
 use structopt::StructOpt;
-use super::Context;
+use super::CommandContext;
 
 use std::time::Instant;
 
 #[derive(StructOpt, Debug)]
 pub struct Opt {}
 
-pub fn run(ctx: Context, _: Opt) -> Result<()> {
+pub fn run(ctx: CommandContext, _: Opt) -> Result<()> {
     let package = ctx.package?;
 
     debug!("building package:\n{:#?}", &package);
@@ -15,7 +15,8 @@ pub fn run(ctx: Context, _: Opt) -> Result<()> {
     let build_dir = package.dir.join(".build");
     if !build_dir.is_dir() {
         debug!("creating build directory");
-        fs::create_dir(&build_dir)?;
+        fs::create_dir(&build_dir)
+            .with_context(|| "unable to create build directory")?;
     }
 
     let start_time = Instant::now();

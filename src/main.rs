@@ -73,7 +73,7 @@ fn try_main() -> Result<()> {
         warn!("superfluous verbosity (-vv is max)");
     }
 
-    let ctx = cmd::Context::new(opt.package);
+    let ctx = cmd::CommandContext::new(opt.package);
 
     match opt.cmd {
         Command::New(cmd_opt) => cmd::new::run(ctx, cmd_opt),

@@ -5,7 +5,7 @@ use crate::prelude::*;
 use crate::package::Package;
 
 #[derive(Debug)]
-pub struct Context {
+pub struct CommandContext {
     pub package: Result<Package, TaggedError>,
 }
 
@@ -19,11 +19,11 @@ pub struct TaggedError {
     source: Error,
 }
 
-impl Context {
-    pub fn new(package_dir: Option<PathBuf>) -> Context {
+impl CommandContext {
+    pub fn new(package_dir: Option<PathBuf>) -> CommandContext {
         let current_dir = std::env::current_dir().unwrap();
 
-        Context {
+        CommandContext {
             package: match package_dir {
                 Some(path) => Package::from_dir(&path)
                     .map_err(|err| TaggedError {
