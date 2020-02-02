@@ -1,0 +1,11 @@
+#string $Name
+Fizzlit[END]
+
+% TODO
+#string $Tattle
+[STYLE:RIGHT][...]
+This is a Fizzlit.
+[WAIT][NEXT][...]
+Max HP: 3, Attack Power: 1
+Defense Power: 0
+[WAIT][END]
