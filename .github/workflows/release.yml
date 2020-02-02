@@ -90,6 +90,7 @@ jobs:
         shell: bash
         run: |
           zip starpkg-unix.zip -9j target/release/starpkg LICENSE CHANGELOG.md
+          zip starpkg-unix.zip -9r starrod
 
       - name: Upload zip asset to release
         id: upload-release-asset
@@ -139,6 +140,7 @@ jobs:
         shell: bash
         run: |
           zip starpkg-windows.zip -9j target/release/starpkg.exe LICENSE CHANGELOG.md
+          zip starpkg-windows.zip -9r starrod
 
       - name: Upload zip asset to release
         id: upload-release-asset

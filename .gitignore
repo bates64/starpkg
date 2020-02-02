@@ -2,3 +2,4 @@
 **/*.rs.bk
 /book
 /index.html
+/starrod/cfg
