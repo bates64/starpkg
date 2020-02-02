@@ -1,0 +1,13 @@
+[book]
+title = "starpkg documentation"
+author = "Alex Bates"
+description = "A tool for creating composable Paper Mario mods."
+language = "en"
+src = "docs"
+
+[output.html]
+preferred-dark-theme = "ayu"
+curly-quotes = true
+no-section-label = true
+git-repository-url = "https://github.com/nanaian/starpkg"
+git-repository-icon = "fa-github"

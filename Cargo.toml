@@ -1,0 +1,33 @@
+[package]
+name = "starpkg"
+version = "0.1.0"
+description = "A tool for creating composable Paper Mario mods"
+homepage = "https://imalex.xyz/starpkg"
+repository = "https://github.com/nanaian/starpkg"
+categories = [ "command-line-utilities" ]
+authors = [ "Alex Bates (https://imalex.xyz)" ]
+edition = "2018"
+license = "0BSD"
+
+[[bin]]
+name = "starpkg"
+path = "src/main.rs"
+
+[dependencies]
+structopt = "0.3"
+
+# Logging
+log = { version = "^0.4.1", features = [ "std" ] }
+ansi_term = "0.12"
+
+# Errors
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Serde
+serde = { version = "1.0", features = [ "derive" ] }
+toml = "0.5"
+semver = { version = "0.9", features = [ "serde" ] }
+
+[dev-dependencies]
+pretty_assertions = "0.6"
