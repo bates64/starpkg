@@ -40,6 +40,7 @@ impl Package {
         };
 
         package.write_manifest()?;
+        fs::write(package.dir.join(".gitignore"), "/.build\n")?;
         fs::create_dir_all(package.dir.join("src/sprites"))?;
 
         Ok(package)
