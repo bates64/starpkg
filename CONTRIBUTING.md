@@ -7,7 +7,14 @@
 
 If your commit makes a breaking change, consider whether it would be feasible to make it minor instead (i.e. make it backwards-compatible). Otherwise, merging it will have to be delayed until the next major release of `starpkg`.
 
+## Documentation
 
+To view documentation locally, use [mdBook](https://github.com/rust-lang/mdBook):
+
+```sh
+$ cargo install mdbook
+$ cargo mdbook serve
+```
 
 ## Releases
 
