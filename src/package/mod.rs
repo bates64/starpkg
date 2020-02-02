@@ -111,8 +111,10 @@ impl Package {
     }
 
     /// Assembles the package to a mod directory, ready to be compiled by Star Rod.
+    /// This is the core of starpkg.
     pub fn assemble(&self, build_dir: &Path) -> Result<()> {
         // Populate sprite directory.
+        let _ = fs::create_dir(build_dir.join("sprite"));
         fs::write(build_dir.join("sprite/SpriteTable.xml"), {
             let mut xml = r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>"#.to_string();
 
@@ -133,7 +135,12 @@ impl Package {
                 let _ = fs::create_dir_all(&npc_dir);
                 for entry in sprite.dir.read_dir()? {
                     let path = entry?.path();
-                    fs::copy(&path, npc_dir.join(path.file_name().unwrap()))?;
+                    let target_path = npc_dir.join(path.file_name().unwrap());
+                    fs::copy(&path, &target_path).with_context(|| {
+                        format!("failed to copy sprite: {} -> {}",
+                            &path.display(),
+                            &target_path.display())
+                    })?;
                 }
 
                 debug!("assembled npc sprite {} -> {:02X}", sprite.identifier, npc_id);
@@ -163,7 +170,7 @@ impl Package {
             xml += "</SpriteTable>";
 
             xml
-        })?;
+        }).with_context(|| "unable to write to SpriteTable.xml")?;
 
         Ok(())
     }
