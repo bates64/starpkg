@@ -1,6 +1,6 @@
 on: push
 
-name: Clippy
+name: Lint & test
 
 jobs:
   clippy:
