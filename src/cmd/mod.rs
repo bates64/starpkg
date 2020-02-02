@@ -25,7 +25,7 @@ impl CommandContext {
 
         CommandContext {
             package: match package_dir {
-                Some(path) => Package::from_dir(&path)
+                Some(path) => Package::load(&path)
                     .map_err(|err| TaggedError {
                         dir: path.to_owned(),
                         source: err.into(),

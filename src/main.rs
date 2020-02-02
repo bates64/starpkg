@@ -1,6 +1,7 @@
 mod prelude {
     pub use std::{io, fs, fmt};
     pub use std::path::{PathBuf, Path};
+    pub use std::fmt::Write;
 
     // Logging
     pub use log::{error, warn, info, debug, trace};

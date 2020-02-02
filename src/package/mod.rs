@@ -1,12 +1,40 @@
+mod id;
+mod sprite;
+
 use crate::prelude::*;
+use id::Identify;
+use sprite::{SpriteId, Sprite};
+use std::collections::HashMap;
+
+const SPRITESHEET_XML_PLAYERSPRITES: &'static str = r#"<PlayerSprites>
+    <Sprite id="1" src="01" name="Mario 1"/>
+    <Sprite id="2" src="02" name="Mario 2"/>
+    <Sprite id="3" src="03" name="Mario 3"/>
+    <Sprite id="4" src="04" name="Mario 4"/>
+    <Sprite id="5" src="05" name="Mario 5"/>
+    <Sprite id="6" src="06" name="Mario 6"/>
+    <Sprite id="7" src="07" name="Mario 7"/>
+    <Sprite id="8" src="08" name="Mario 8"/>
+    <Sprite id="9" src="09" name="Mario 9"/>
+    <Sprite id="A" src="0A" name="Peach 1"/>
+    <Sprite id="B" src="0B" name="Peach 2"/>
+    <Sprite id="C" src="0C" name="Peach 3"/>
+    <Sprite id="D" src="0D" name="Peach 4"/>
+</PlayerSprites>"#;
 
 /// Represents a package directory.
 #[derive(Debug)]
 pub struct Package {
     pub dir: PathBuf,
+
     manifest: Manifest,
 
-    pub sprites: Vec<Sprite>,
+    /// Flattened dependency graph.
+    dependencies: Vec<Package>,
+
+    /// A map of Identifier -> Sprite for this package and its dependencies.
+    /// Identifiers are flat - they do not care if dependencies are nested.
+    sprites: HashMap<SpriteId, Sprite>,
 }
 
 impl Package {
@@ -32,53 +60,82 @@ impl Package {
 
         let package = Package {
             dir,
+
             manifest: Manifest {
                 name,
                 version: Version::parse("0.1.0").unwrap(),
+
+                dependencies: HashMap::new(),
             },
-            sprites: Vec::new(),
+
+            dependencies: Vec::new(),
+            sprites: HashMap::new(),
         };
 
         package.write_manifest()?;
         fs::write(package.dir.join(".gitignore"), "/.build\n")?;
-        fs::create_dir_all(package.dir.join("src/sprites"))?;
+        fs::create_dir(package.dir.join("src"))?;
 
         Ok(package)
     }
 
     /// Loads the package at the given directory.
-    pub fn from_dir(dir: &Path) -> Result<Package, FromDirError> {
+    pub fn load(dir: &Path) -> Result<Package, LoadError> {
         if !dir.is_dir() {
-            return Err(FromDirError::NotDirectory(dir.to_owned()));
+            return Err(LoadError::NotDirectory(dir.to_owned()));
         }
 
         // Read starpkg.toml.
-        let mut pkg = Package {
-            dir: dir.to_owned(),
-            manifest: {
-                let string = fs::read_to_string(dir.join("starpkg.toml"))
-                    .map_err(FromDirError::UnfoundManifest)?;
+        let manifest: Manifest = {
+            let string = fs::read_to_string(dir.join("starpkg.toml"))
+                .map_err(LoadError::UnfoundManifest)?;
 
-                toml::from_str(&string)?
-            },
-            sprites: Vec::new()
+            toml::from_str(&string)?
         };
 
-        // Read NPC sprites.
-        let npcs_dir = dir.join("src/sprite/npc");
-        if npcs_dir.is_dir() {
-            for entry in npcs_dir.read_dir().unwrap() {
-                let dir = entry.unwrap().path();
+        // Load all dependencies into a flat vec.
+        let deps = manifest
+            .load_dependencies(dir)?
+            .into_iter()
+            .fold(Vec::new(), |mut deps, mut dep| {
+                deps.append(&mut dep.dependencies);
+                deps.push(dep);
 
-                pkg.sprites.push(Sprite {
-                    identifier: Identifier::new(&pkg, dir
-                        .file_name()
-                        .unwrap()
-                        .to_str()
-                        .unwrap()
-                        .to_string()),
-                    dir,
-                });
+                deps
+            });
+
+        let mut pkg = Package {
+            dir: dir.to_owned(),
+
+            manifest,
+
+            // Copy in dependency sprites.
+            sprites: {
+                let mut map = HashMap::new();
+
+                for dep in &deps {
+                    for (id, sprite) in &dep.sprites {
+                        // XXX: cloning
+                        map.insert(id.clone(), sprite.clone());
+                    }
+                }
+
+                map
+            },
+
+            dependencies: deps,
+        };
+
+        // Load this package's sprites.
+        let sprites_dir = dir.join("src/sprite");
+        if sprites_dir.is_dir() {
+            for entry in sprites_dir.read_dir().unwrap() {
+                let dir = entry.unwrap().path();
+                let sprite = Sprite::load(dir);
+
+                debug!("{}: reading sprite {}", &pkg, &sprite.name());
+
+                pkg.sprites.insert(SpriteId::identify(&pkg, &sprite), sprite);
             }
         }
 
@@ -95,10 +152,10 @@ impl Package {
             })?;
 
         loop {
-            match Package::from_dir(&path) {
+            match Package::load(&path) {
                 Ok(package) => return Ok(package),
-                Err(FromDirError::UnfoundManifest(_)) => (),
-                Err(err) => return Err(FindError::FromDirError(err)),
+                Err(LoadError::UnfoundManifest(_)) => (),
+                Err(err) => return Err(FindError::LoadError(err)),
             }
 
             match path.parent() {
@@ -112,63 +169,46 @@ impl Package {
 
     /// Assembles the package to a mod directory, ready to be compiled by Star Rod.
     /// This is the core of starpkg.
-    pub fn assemble(&self, build_dir: &Path) -> Result<()> {
-        // Populate sprite directory.
-        let _ = fs::create_dir(build_dir.join("sprite"));
-        fs::write(build_dir.join("sprite/SpriteTable.xml"), {
-            let mut xml = r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>"#.to_string();
+    pub fn assemble(&mut self, build_dir: &Path) -> Result<()> {
+        let _ = fs::create_dir_all(build_dir);
 
-            xml += "<SpriteTable>";
+        self.assemble_sprite_table(&build_dir.join("sprite"))?;
 
-            // NPC sprites
-            xml += "<NpcSprites>";
-            let mut npc_id = 1u8;
-            for sprite in &self.sprites {
-                xml += &format!(r#"<Sprite id="{id:X}" src="{src:02X}" name="{name}"/>"#,
-                    id   = npc_id,
-                    src  = npc_id,
-                    name = sprite.identifier,
-                );
+        Ok(())
+    }
 
-                // Copy the sprite's directory across.
-                let npc_dir = build_dir.join(format!("sprite/npc/src/{:02X}", npc_id));
-                let _ = fs::create_dir_all(&npc_dir);
-                for entry in sprite.dir.read_dir()? {
-                    let path = entry?.path();
-                    let target_path = npc_dir.join(path.file_name().unwrap());
-                    fs::copy(&path, &target_path).with_context(|| {
-                        format!("failed to copy sprite: {} -> {}",
-                            &path.display(),
-                            &target_path.display())
-                    })?;
-                }
+    fn assemble_sprite_table(&mut self, sprite_dir: &Path) -> Result<()> {
+        let _ = fs::create_dir_all(sprite_dir);
 
-                debug!("assembled npc sprite {} -> {:02X}", sprite.identifier, npc_id);
+        fs::write(sprite_dir.join("SpriteTable.xml"), {
+            let mut xml = String::new();
+            writeln!(xml, r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>"#)?;
+            writeln!(xml, "<SpriteTable>")?;
 
-                npc_id += 1;
+            // NPC sprites.
+            writeln!(xml, "    <NpcSprites>")?;
+            let mut sprite_index = 1u8;
+            for (sprite_id, sprite) in &mut self.sprites {
+                writeln!(xml, r#"        <Sprite id="{idx:X}" src="{idx:02X}" name="{name}"/>"#,
+                    idx  = sprite_index,
+                    name = sprite_id,
+                )?;
+
+                // Assemble the sprite's directory.
+                let this_dir = sprite_dir.join(format!("npc/src/{:02X}", sprite_index));
+                let _ = fs::create_dir_all(&this_dir);
+                sprite.assemble(&this_dir, sprite_index)?;
+
+                debug!("assembled npc sprite {} -> {:02X}", &sprite_id, sprite_index);
+
+                sprite_index += 1;
             }
-            xml += "</NpcSprites>";
+            writeln!(xml, "    </NpcSprites>")?;
 
             // Player sprites (TODO: support patching these?)
-            xml += r#"
-            <PlayerSprites>
-                <Sprite id="1" src="01" name="Mario 1"/>
-                <Sprite id="2" src="02" name="Mario 2"/>
-                <Sprite id="3" src="03" name="Mario 3"/>
-                <Sprite id="4" src="04" name="Mario 4"/>
-                <Sprite id="5" src="05" name="Mario 5"/>
-                <Sprite id="6" src="06" name="Mario 6"/>
-                <Sprite id="7" src="07" name="Mario 7"/>
-                <Sprite id="8" src="08" name="Mario 8"/>
-                <Sprite id="9" src="09" name="Mario 9"/>
-                <Sprite id="A" src="0A" name="Peach 1"/>
-                <Sprite id="B" src="0B" name="Peach 2"/>
-                <Sprite id="C" src="0C" name="Peach 3"/>
-                <Sprite id="D" src="0D" name="Peach 4"/>
-            </PlayerSprites>"#;
+            writeln!(xml, "{}", SPRITESHEET_XML_PLAYERSPRITES)?;
 
             xml += "</SpriteTable>";
-
             xml
         }).with_context(|| "unable to write to SpriteTable.xml")?;
 
@@ -184,28 +224,23 @@ impl Package {
     }
 }
 
+impl PartialEq for Package {
+    fn eq(&self, other: &Self) -> bool {
+        self.manifest.name == other.manifest.name && self.manifest.version == other.manifest.version
+    }
+}
+impl Eq for Package {}
+
 impl fmt::Display for Package {
-    /// `{}`   -> `{name} v{version}` in cyan
-    /// `{:#}` -> `{name}_v{version}`
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if f.alternate() {
-            // Safe-identifier mode
-            write!(f, "{}",
-                format!("{}_{}", &self.manifest.name, &self.manifest.version)
-                    .replace(".", "_")
-                    .replace(" ", "_")
-                    .replace(":", "_")
-            )
-        } else {
-            write!(f, "{}", Color::Fixed(14).normal().paint(
-                format!("{} v{}", &self.manifest.name, &self.manifest.version)
-            ))
-        }
+        write!(f, "{}", Color::Fixed(14).normal().paint(
+            format!("{} v{}", &self.manifest.name, &self.manifest.version)
+        ))
     }
 }
 
 #[derive(Error, Debug)]
-pub enum FromDirError {
+pub enum LoadError {
     #[error("not a directory: {0}")]
     NotDirectory(PathBuf),
 
@@ -232,7 +267,7 @@ pub enum FindError {
     },
 
     #[error(transparent)]
-    FromDirError(#[from] FromDirError),
+    LoadError(#[from] LoadError),
 }
 
 /// A starpkg.toml.
@@ -240,32 +275,44 @@ pub enum FindError {
 struct Manifest {
     name: String,
     version: Version,
+
+    #[serde(default)]
+    dependencies: HashMap<String, Dependency>,
 }
 
-/// A fully-qualified identifier.
-#[derive(Debug)]
-pub struct Identifier {
-    package_id: String,
-    name: String,
-}
+impl Manifest {
+    fn load_dependencies(&self, pkg_dir: &Path) -> Result<Vec<Package>, LoadError> {
+        let mut packages = Vec::new();
 
-impl Identifier {
-    pub fn new(package: &Package, name: String) -> Identifier {
-        Identifier {
-            package_id: format!("{:#}", package),
-            name,
+        for (name, dep) in &self.dependencies {
+            if dep.path.is_absolute() {
+                warn!("dependency '{}' uses an absolute path", name);
+            }
+
+            let path = pkg_dir.join(&dep.path);
+
+            debug!("loading dependency '{}' from path: {}", name, &path.display());
+
+            // TODO: detect cyclical dependencies, e.g.
+            //
+            // child = { path = "child" }
+            //
+            // parent = { path = ".." }
+
+            let package = Package::load(&path)?; // TODO: error context
+
+            if package.manifest.name != *name {
+                warn!("dependency '{}' actually has name '{}'", name, &package.manifest.name)
+            }
+
+            packages.push(package);
         }
+
+        Ok(packages)
     }
 }
 
-impl fmt::Display for Identifier {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}_{}", self.package_id, self.name)
-    }
-}
-
-#[derive(Debug)]
-pub struct Sprite {
-    pub dir: PathBuf,
-    pub identifier: Identifier,
+#[derive(Serialize, Deserialize, Debug)]
+struct Dependency {
+    path: PathBuf,
 }

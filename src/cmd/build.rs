@@ -8,9 +8,9 @@ use std::time::Instant;
 pub struct Opt {}
 
 pub fn run(ctx: CommandContext, _: Opt) -> Result<()> {
-    let package = ctx.package?;
+    let mut package = ctx.package?;
 
-    debug!("building package:\n{:#?}", &package);
+    trace!("assembling package:\n{:#?}", &package);
 
     let build_dir = package.dir.join(".build");
     if !build_dir.is_dir() {

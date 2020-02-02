@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 - `starpkg new` now creates a `.gitignore` file which ignores the starpkg `.build` directory
+- **`src/sprites` is now `src/sprite`**
+- `starfmt.toml` now supports a `[dependencies]` section where paths to dependencies can be provided using `{ path = "path/to/dependency/package" }` values
 
 ## [0.1.0] - 2020-02-01
 Initial release.
