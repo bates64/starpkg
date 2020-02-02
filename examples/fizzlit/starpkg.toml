@@ -1,0 +1,6 @@
+name = "fizzlit"
+version = "0.1.0"
+authors = [
+    { name = "Alex Bates", www = "https://imalex.xyz", discord = "nanalan#0771" },
+    { name = "Moldy", discord = "Moldy#2189" }, # Fizzlit sprites
+]

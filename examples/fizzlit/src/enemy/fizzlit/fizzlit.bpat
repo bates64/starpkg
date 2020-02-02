@@ -1,0 +1,72 @@
+#new:Actor $Actor
+% stats
+[Index]         {Actor:fizzlit}
+[Level]         9`b
+[MaxHP]         3`b
+[Coins]         1`b
+[Flags]       00000000
+[StatusTable] $StatusTable
+% ai
+[SpriteCount]   1`s
+[SpriteTable] $SpriteTable
+[Script]      $Script_Init
+% move effectiveness
+[Escape]       90`b
+[Item]        100`b
+[AirLift]     100`b
+[Hurricane]    90`b
+[UpAndAway]    95`b
+[PowerBounce] 100`b
+[SpinSmash]     0`b
+% ui positions
+[Size]         24`b  24`b
+[HealthBar]     0`b   0`b
+[StatusTurn]  -10`b  20`b
+[StatusIcon]   10`b  20`b
+
+#new:StatusTable $StatusTable
+.Status:Normal      0`
+.Status:Default     0`
+.Status:Sleep      90`
+.Status:Poison     50`
+.Status:Frozen      0`
+.Status:Dizzy      75`
+.Status:Fear       50`
+.Status:Static      0` % Immune
+.Status:Paralyze    0` % Immune
+.Status:Shrink     90`
+.Status:Stop       90`
+.Status:DefaultTurnMod    0`
+.Status:SleepTurnMod      0`
+.Status:PoisonTurnMod     0`
+.Status:FrozenTurnMod     0`
+.Status:DizzyTurnMod      0`
+.Status:FearTurnMod       0`
+.Status:StaticTurnMod     0`
+.Status:ParalyzeTurnMod   0`
+.Status:ShrinkTurnMod     0`
+.Status:StopTurnMod       0`
+.Status:End
+
+#new:SpriteTable $SpriteTable
+00800000 01000000 001400FF $IdleAnimations_Normal $DefenseTable 00000000 00000000 00F60000 00000000
+
+#new:IdleAnimations $IdleAnimations_Normal
+.Status:Normal    {Sprite:fizzlit:idle}
+.Status:Stone     {Sprite:fizzlit:stop}
+.Status:Sleep     {Sprite:fizzlit:sleep}
+.Status:Poison    {Sprite:fizzlit:idle}
+.Status:Stop      {Sprite:fizzlit:stop}
+.Status:Static    {Sprite:fizzlit:idle}
+.Status:Paralyze  {Sprite:fizzlit:stop}
+.Status:Dizzy     {Sprite:fizzlit:sleep} % TODO: dizzy animation
+.Status:Fear      {Sprite:fizzlit:sleep}
+.Status:End
+
+% TODO
+#new:Script $Script_Init
+	%Call BindTakeTurn 	  ( .Actor:Self $Script_TakeTurn )
+	%Call BindIdle        ( .Actor:Self $Script_Idle )
+	%Call BindHandleEvent ( .Actor:Self $Script_HandleEvent )
+	Return
+	End

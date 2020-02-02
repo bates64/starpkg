@@ -1,0 +1,9 @@
+name = "fizzlit_test"
+version = "1.0.0"
+
+[mod]
+# Entry 0 of this map is loaded when a player first loads an empty ('First Play') save file.
+initial_map = "tst/test_map"
+
+[dependencies]
+fizzlit = { path = ".." }

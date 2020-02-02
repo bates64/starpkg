@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<SpriteSheet a="1" b="1">
+	<PaletteList>
+		<Palette id="0" name="purple" src="Palette_00.png"/>
+		<Palette id="1" name="yellow" src="Palette_01.png"/>
+	</PaletteList>
+	<RasterList>
+		<Raster id="0" palette="0" src="fizzlit_purple1.png"/>
+		<Raster id="1" palette="0" src="fizzlit_purple2.png"/>
+		<Raster id="2" palette="0" src="fizzlit_purple3.png"/>
+		<Raster id="3" palette="0" src="fizzlit_purple4.png"/>
+		<Raster id="4" palette="0" src="fizzlit_purple5.png"/>
+		<Raster id="5" palette="0" src="fizzlit_purple6.png"/>
+		<Raster id="6" palette="0" src="fizzlit_purple7.png"/>
+		<Raster id="7" palette="0" src="fizzlit_purple8.png"/>
+		<Raster id="8" palette="0" src="fizzlit_purple9.png"/>
+		<Raster id="9" palette="0" src="fizzlit_purple10.png"/>
+		<Raster id="A" palette="0" src="fizzlit_purple11.png"/>
+		<Raster id="B" palette="1" src="fizzlit_yellow1.png"/>
+		<Raster id="C" palette="1" src="fizzlit_yellow2.png"/>
+		<Raster id="D" palette="1" src="fizzlit_yellow3.png"/>
+		<Raster id="E" palette="1" src="fizzlit_yellow4.png"/>
+		<Raster id="F" palette="1" src="fizzlit_yellow5.png"/>
+		<Raster id="10" palette="1" src="fizzlit_yellow6.png"/>
+		<Raster id="11" palette="1" src="fizzlit_yellow7.png"/>
+		<Raster id="12" palette="1" src="fizzlit_yellow8.png"/>
+		<Raster id="13" palette="1" src="fizzlit_yellow9.png"/>
+		<Raster id="14" palette="1" src="fizzlit_yellow10.png"/>
+		<Raster id="15" palette="1" src="fizzlit_yellow11.png"/>
+		<Raster id="16" palette="1" src="fizzlit_yellow12.png"/>
+	</RasterList>
+	<AnimationList>
+		<Animation name="stop">
+			<Component name="Comp_00" xyz="0,0,0">
+				<Command val="1000"/>
+				<Command val="2"/>
+				<Command val="2000"/>
+			</Component>
+		</Animation>
+		<Animation name="idle">
+			<Component name="Comp_00" xyz="0,0,0">
+				<Command val="1000"/>
+				<Command val="1E"/>
+				<Command val="1001"/>
+				<Command val="1E"/>
+				<Command val="2000"/>
+			</Component>
+		</Animation>
+		<Animation name="sleep">
+			<Component name="Comp_00" xyz="0,0,0">
+				<Command val="1008"/>
+				<Command val="2"/>
+				<Command val="2000"/>
+			</Component>
+		</Animation>
+	</AnimationList>
+</SpriteSheet>

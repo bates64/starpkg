@@ -1,0 +1,33 @@
+#import fizzlit/enemy/fizzlit.mpat fizzlit
+
+#new:EntryList $EntryList
+{Vec4f:Entry0}
+
+#new:Header $Header
+[MainScript] $Script_Main
+[EntryList]  $EntryList
+[EntryCount] 00000001
+[Background] 80200000
+[MapTattle]  00000000
+
+#new:Script_Main $Script_Main
+    Call SetSpriteShading  ( FFFFFFFF )
+    Call SetCamPerspective ( .Default 00000003 00000019 00000010 00001000 )
+    Call SetCamBGColor 	   ( .Default 00000000 00000000 00000000 )
+    Call SetCamEnabled 	   ( .Default .True )
+    Call SetCamLeadPlayer  ( .Default .False )
+    Call MakeNpcs          ( 00000000 $NpcGroupList_Enemies )
+    Return
+    End
+
+#new:NpcGroupList $NpcGroupList_Enemies
+00000001 $NpcGroup_Fizzlit0 {Battle:test/fizzlit_2x}
+00000000 00000000 00000000
+
+#new:NpcGroup $NpcGroup_Fizzlit0
+00000001 $fizzlit:NpcSettings {Vec3f:NPC_Fizzlit0}
+00140B00 $fizzlit:Script_Init 00000001 FFFFFD76 00000140 % TODO: NPC flags
+{NoItems} {NoHP} {NoFP} {NoCoinBonus}
+{Movement:NPC_Fizzlit0}
+{AnimationTable:NPC_Fizzlit0}
+00000000 00000000 00000000 00000000

@@ -1,0 +1,9 @@
+# Corresponds to tst_tex.txa
+
+[tst_checkered]
+img     = "tst_checkered.png"
+format  = "CI-4"
+hwrap   = "repeat"
+vwrap   = "repeat"
+filter  = false
+combine = 0
