@@ -31,7 +31,7 @@
 	</RasterList>
 	<AnimationList>
 		<Animation name="stop">
-			<Component name="Comp_00" xyz="0,0,0">
+			<Component xyz="0,0,0">
 				<Command val="1000"/>
 				<Command val="2"/>
 				<Command val="2000"/>
@@ -49,6 +49,103 @@
 		<Animation name="sleep">
 			<Component name="Comp_00" xyz="0,0,0">
 				<Command val="1008"/>
+				<Command val="2"/>
+				<Command val="2000"/>
+			</Component>
+		</Animation>
+		<Animation name="to_squish">
+			<Component name="Comp_00" xyz="0,0,0">
+				<Command val="1002"/>
+				<Command val="4"/>
+				<Command val="1003"/>
+				<Command val="3"/>
+				<Command val="1004"/>
+				<Command val="3"/>
+				<Command val="1005"/>
+				<Command val="3"/>
+				<Command val="6001"/>
+				<Command val="100B"/>
+				<Command val="6"/>
+				<Command val="100C"/>
+				<Command val="6"/>
+				<Command val="7008"/>
+				<Command val="3"/>
+				<Command val="4"/>
+				<Command val="100D"/>
+				<Command val="4"/>
+				<Command val="100E"/>
+				<Command val="3"/>
+				<Command val="100F"/>
+				<Command val="4"/>
+				<Command val="1010"/>
+				<Command val="5"/>
+				<Command val="1011"/>
+				<Command val="6"/>
+				<Command val="1012"/>
+				<Command val="4"/>
+				<Command val="1013"/>
+				<Command val="2"/>
+				<Command val="201C"/>
+			</Component>
+		</Animation>
+		<Animation name="from_squish">
+			<Component name="Comp_00" xyz="0,0,0">
+				<Command val="6001"/>
+				<Command val="1015"/>
+				<Command val="6"/>
+				<Command val="1016"/>
+				<Command val="6"/>
+				<Command val="7000"/>
+				<Command val="3"/>
+				<Command val="4"/>
+				<Command val="6000"/>
+				<Command val="1006"/>
+				<Command val="5"/>
+				<Command val="1005"/>
+				<Command val="4"/>
+				<Command val="1007"/>
+				<Command val="4"/>
+				<Command val="1008"/>
+				<Command val="4"/>
+				<Command val="1009"/>
+				<Command val="5"/>
+				<Command val="100A"/>
+				<Command val="4"/>
+				<Command val="1000"/>
+				<Command val="2"/>
+				<Command val="2015"/>
+			</Component>
+		</Animation>
+		<Animation name="squish_stop">
+			<Component xyz="0,0,0">
+				<Command val="6001"/>
+				<Command val="1015"/>
+				<Command val="2"/>
+				<Command val="2000"/>
+			</Component>
+		</Animation>
+		<Animation name="squish_idle">
+			<Component name="Comp_00" xyz="0,0,0">
+				<Command val="1015"/>
+				<Command val="18"/>
+				<Command val="1016"/>
+				<Command val="18"/>
+				<Command val="7000"/>
+				<Command val="4"/>
+				<Command val="1014"/>
+				<Command val="C"/>
+				<Command val="1016"/>
+				<Command val="C"/>
+				<Command val="7006"/>
+				<Command val="2"/>
+				<Command val="C"/>
+				<Command val="2000"/>
+			</Component>
+		</Animation>
+		<Animation name="squish_sleep">
+			<Component xyz="0,0,0">
+				<Command val="6001"/>
+				<Command val="1014"/>
 				<Command val="2"/>
 				<Command val="2000"/>
 			</Component>
