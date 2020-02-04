@@ -3,6 +3,8 @@
 starpkg adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Note that as starpkg is an application, not a library, only changes relevant to the user (e.g. changes to the CLI or package structure) will be listed here.
 
 ## [Unreleased]
+## Fixes
+- Fixed terminal colors not appearing on Windows 10
 
 ## [0.2.0-rc.4] - 2020-02-04
 ### Additions
@@ -19,6 +21,6 @@ starpkg adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). N
 ## [0.1.0] - 2020-02-01
 Initial release.
 
-[Unreleased]: https://github.com/nanaian/starpkg/compare/v0.2.0-rc.3...HEAD
-[0.2.0-rc.3]: https://github.com/nanaian/starpkg/compare/v0.1.0...v0.2.0-rc.3
+[Unreleased]: https://github.com/nanaian/starpkg/compare/v0.2.0-rc.4...HEAD
+[0.2.0-rc.4]: https://github.com/nanaian/starpkg/compare/v0.1.0...v0.2.0-rc.4
 [0.1.0]: https://github.com/nanaian/starpkg/releases/tag/v0.1.0

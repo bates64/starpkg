@@ -37,6 +37,9 @@ impl log::Log for Logger {
 static LOGGER: Logger = Logger;
 
 pub fn init(verbosity: usize) -> Result<(), SetLoggerError> {
+    #[cfg(windows)]
+    let _ = ansi_term::enable_ansi_support();
+
     log::set_logger(&LOGGER)
         .map(|()| log::set_max_level(match verbosity {
             0 => LevelFilter::Info,
