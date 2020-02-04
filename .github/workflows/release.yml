@@ -8,25 +8,25 @@ name: Release
 # See https://github.com/actions/create-release/issues/14
 
 jobs:
-  publish:
-    name: Publish on crates.io
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # publish:
+  #   name: Publish on crates.io
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+  #     - name: Install stable toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         profile: minimal
+  #         toolchain: stable
+  #         override: true
 
-      - name: Cargo publish
-        uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --token ${{ secrets.CRATES_IO_TOKEN }}
+  #     - name: Cargo publish
+  #       uses: actions-rs/cargo@v1
+  #       with:
+  #         command: publish
+  #         args: --token ${{ secrets.CRATES_IO_TOKEN }}
 
   release:
     name: Make GitHub release & publish to crates.io
