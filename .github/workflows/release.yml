@@ -89,18 +89,19 @@ jobs:
       - name: Zip release binary
         shell: bash
         run: |
-          zip starpkg-linux.zip -9j target/release/starpkg LICENSE CHANGELOG.md
+          mv target/release/starpkg .
+          tar starpkg-linux.tar.gz -czf starpkg LICENSE CHANGELOG.md
 
-      - name: Upload zip asset to release
+      - name: Upload tar.gz asset to release
         id: upload-release-asset
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-linux.zip
-          asset_name: starpkg-linux.zip
-          asset_content_type: application/zip
+          asset_path: ./starpkg-${{ github.ref }}-linux.tar.gz
+          asset_name: starpkg-linux.tar.gz
+          asset_content_type: application/x-rar-compressed
 
   build_macos:
     name: Build (macOS)
@@ -138,7 +139,8 @@ jobs:
       - name: Zip release binary
         shell: bash
         run: |
-          zip starpkg-macos.zip -9j target/release/starpkg LICENSE CHANGELOG.md
+          mv target/release/starpkg .
+          zip starpkg-macos.zip -9j starpkg LICENSE CHANGELOG.md
 
       - name: Upload zip asset to release
         id: upload-release-asset
@@ -147,7 +149,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-macos.zip
+          asset_path: ./starpkg-${{ github.ref }}-macos.zip
           asset_name: starpkg-macos.zip
           asset_content_type: application/zip
 
@@ -187,7 +189,8 @@ jobs:
       - name: Zip release binary
         shell: bash
         run: |
-          zip starpkg-windows.zip -9j target/release/starpkg.exe LICENSE CHANGELOG.md
+          mv target/release/starpkg.exe .
+          7z a starpkg-windows.7z starpkg.exe LICENSE CHANGELOG.md
 
       - name: Upload zip asset to release
         id: upload-release-asset
@@ -196,6 +199,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-windows.zip
+          asset_path: ./starpkg-${{ github.ref }}-windows.zip
           asset_name: starpkg-windows.zip
           asset_content_type: application/zip
