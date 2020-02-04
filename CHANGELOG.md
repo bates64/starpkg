@@ -4,7 +4,7 @@ starpkg adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). N
 
 ## [Unreleased]
 
-## [0.2.0-rc.3] - 2020-02-04
+## [0.2.0-rc.4] - 2020-02-04
 ### Additions
 - Actor & string exports are now supported!
 - Scripts can now reference other exports with `{Type:id}` syntax
