@@ -190,7 +190,7 @@ jobs:
         shell: bash
         run: |
           mv target/release/starpkg.exe .
-          7z a starpkg-windows.7z starpkg.exe LICENSE CHANGELOG.md
+          7z a starpkg-windows.zip starpkg.exe LICENSE CHANGELOG.md
 
       - name: Upload zip asset to release
         id: upload-release-asset
