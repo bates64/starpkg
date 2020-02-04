@@ -3,6 +3,8 @@ mod prelude {
     pub use std::path::{PathBuf, Path};
     pub use std::fmt::Write;
 
+    pub use lazy_static::lazy_static;
+
     // Logging
     pub use log::{error, warn, info, debug, trace};
     pub use ansi_term::{ANSIString, Color};
@@ -58,8 +60,9 @@ fn main() {
         let mut chain = err.chain();
 
         error!("{}", chain.next().unwrap());
+
         for cause in chain {
-            trace!("{}", cause);
+            println!("       {}", Color::Fixed(8).normal().paint(format!("{}", cause)));
         }
 
         std::process::exit(1);

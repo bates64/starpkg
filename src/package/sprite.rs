@@ -2,7 +2,9 @@ use crate::prelude::*;
 use super::Package;
 use super::id::{Identify, Identifier};
 
-#[derive(Hash, Clone, PartialEq, Eq, Debug)]
+pub type SpriteMap = std::collections::HashMap<SpriteId, Sprite>;
+
+#[derive(Hash, Clone, PartialEq, Eq)]
 pub struct SpriteId(Identifier);
 
 impl Identify for SpriteId {
@@ -15,15 +17,17 @@ impl Identify for SpriteId {
     fn identify(pkg: &Package, sprite: &Sprite) -> Self {
         Self(Identifier::from_package(pkg, &sprite.name()))
     }
-
-    fn resolve<'pkg>(&self, pkg: &'pkg Package) -> Option<&'pkg Sprite> {
-        pkg.sprites.get(self)
-    }
 }
 
 impl fmt::Display for SpriteId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
+    }
+}
+
+impl fmt::Debug for SpriteId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", Color::Fixed(12).normal().paint(format!("{{Sprite:{:?}}}", self.0)))
     }
 }
 
@@ -35,7 +39,7 @@ pub struct Sprite {
 }
 
 impl Sprite {
-    pub fn load(dir: PathBuf) -> Sprite {
+    pub fn load(_: &str, dir: PathBuf) -> Sprite {
         // TODO: load SpriteSheet.xml etc
         Sprite { dir, assembled_index: 0 }
     }

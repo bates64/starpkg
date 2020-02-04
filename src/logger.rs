@@ -21,10 +21,10 @@ impl log::Log for Logger {
                 }
             }
 
-            eprintln!("{:>5} {}", match record.level() {
+            eprintln!("{} {}", match record.level() {
                 Level::Error => Color::Fixed(9).normal().paint("error:"),
-                Level::Warn  => Color::Fixed(3).normal().paint("warn:"),
-                Level::Info  => Color::Fixed(10).normal().paint("info:"),
+                Level::Warn  => Color::Fixed(3).normal().paint("warn: "),
+                Level::Info  => Color::Fixed(10).normal().paint("info: "),
                 Level::Debug => Color::Fixed(14).normal().paint("debug:"),
                 Level::Trace => Color::Fixed(8).normal().paint("trace:"),
             }, record.args());

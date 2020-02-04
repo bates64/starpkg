@@ -1,12 +1,22 @@
 mod id;
+mod script;
+
+// TODO: make these share a common trait so code doesn't have to be copied everywhere.
+// Call them 'exports'?
 mod sprite;
+mod text;
+mod actor;
 
 use crate::prelude::*;
-use id::Identify;
-use sprite::{SpriteId, Sprite};
 use std::collections::HashMap;
+use id::Identify;
+use script::Script;
 
-const SPRITESHEET_XML_PLAYERSPRITES: &'static str = r#"<PlayerSprites>
+use sprite::*;
+use actor::*;
+use text::*;
+
+const SPRITESHEET_XML_PLAYERSPRITES: &str = r#"<PlayerSprites>
     <Sprite id="1" src="01" name="Mario 1"/>
     <Sprite id="2" src="02" name="Mario 2"/>
     <Sprite id="3" src="03" name="Mario 3"/>
@@ -22,19 +32,23 @@ const SPRITESHEET_XML_PLAYERSPRITES: &'static str = r#"<PlayerSprites>
     <Sprite id="D" src="0D" name="Peach 4"/>
 </PlayerSprites>"#;
 
-/// Represents a package directory.
+/// A package is a collection of sprites, actors, etc that optionally depends on other packages.
+/// They can be assembled into a Star Rod mod folders to be compiled.
 #[derive(Debug)]
 pub struct Package {
+    /// The directory holding this package.
     pub dir: PathBuf,
 
+    /// Parsed starpkg.toml manifest file.
     manifest: Manifest,
 
     /// Flattened dependency graph.
     dependencies: Vec<Package>,
 
-    /// A map of Identifier -> Sprite for this package and its dependencies.
-    /// Identifiers are flat - they do not care if dependencies are nested.
-    sprites: HashMap<SpriteId, Sprite>,
+    /// Maps of Identifier -> export for this package and its cummulative dependencies.
+    sprites: SpriteMap,
+    actors: ActorMap,
+    texts: TextMap,
 }
 
 impl Package {
@@ -69,7 +83,10 @@ impl Package {
             },
 
             dependencies: Vec::new(),
+
             sprites: HashMap::new(),
+            actors: HashMap::new(),
+            texts: HashMap::new(),
         };
 
         package.write_manifest()?;
@@ -94,7 +111,7 @@ impl Package {
         };
 
         // Load all dependencies into a flat vec.
-        let deps = manifest
+        let mut deps = manifest
             .load_dependencies(dir)?
             .into_iter()
             .fold(Vec::new(), |mut deps, mut dep| {
@@ -103,25 +120,47 @@ impl Package {
 
                 deps
             });
+        deps.sort_unstable_by_key(|dep| dep.name().to_owned());
+        deps.dedup(); // Removes dependencies with the same name and same version.
+
+        // Check for dependencies with the same name but unequal versions.
+        let deps_unchecked_length = deps.len();
+        deps.dedup_by_key(|dep| dep.name().to_owned()); // Removes dependencies with the same name.
+        if deps.len() != deps_unchecked_length {
+            // TODO: give more info when throwing this error
+            return Err(LoadError::MultiDependencyVersionMismatch);
+        }
+
+        fn sum_hashmaps<K: Eq + std::hash::Hash, V>(
+            mut sum_map: HashMap<K, V>,
+            map: HashMap<K, V>
+        ) -> HashMap<K, V> {
+            for (key, value) in map.into_iter() {
+                sum_map.insert(key, value);
+            }
+
+            sum_map
+        }
 
         let mut pkg = Package {
             dir: dir.to_owned(),
 
             manifest,
 
-            // Copy in dependency sprites.
-            sprites: {
-                let mut map = HashMap::new();
+            sprites: deps
+                .iter()
+                .map(|dep| dep.sprites.clone())
+                .fold(HashMap::new(), sum_hashmaps),
 
-                for dep in &deps {
-                    for (id, sprite) in &dep.sprites {
-                        // XXX: cloning
-                        map.insert(id.clone(), sprite.clone());
-                    }
-                }
+            actors: deps
+                .iter()
+                .map(|dep| dep.actors.clone())
+                .fold(HashMap::new(), sum_hashmaps),
 
-                map
-            },
+            texts: deps
+                .iter()
+                .map(|dep| dep.texts.clone())
+                .fold(HashMap::new(), sum_hashmaps),
 
             dependencies: deps,
         };
@@ -131,11 +170,43 @@ impl Package {
         if sprites_dir.is_dir() {
             for entry in sprites_dir.read_dir().unwrap() {
                 let dir = entry.unwrap().path();
-                let sprite = Sprite::load(dir);
+                let sprite = Sprite::load(pkg.name(), dir);
 
-                debug!("{}: reading sprite {}", &pkg, &sprite.name());
+                let id = SpriteId::identify(&pkg, &sprite);
+                info!("loaded {:?}", &id);
 
-                pkg.sprites.insert(SpriteId::identify(&pkg, &sprite), sprite);
+                pkg.sprites.insert(id, sprite);
+            }
+        }
+
+        // Load this package's actors.
+        let actors_dir = dir.join("src/actor");
+        if actors_dir.is_dir() {
+            for entry in actors_dir.read_dir().unwrap() {
+                let dir = entry.unwrap().path();
+                let actor = Actor::load(pkg.name(), dir)?;
+
+                let id = ActorId::identify(&pkg, &actor);
+                info!("loaded {:?}", &id);
+
+                pkg.actors.insert(id, actor);
+            }
+        }
+
+        // Load this package's texts (strings).
+        let texts_dir = dir.join("src/string");
+        if texts_dir.is_dir() {
+            for entry in texts_dir.read_dir().unwrap() {
+                let file = entry.unwrap().path();
+                let texts = Text::load_many(pkg.name(), file.clone())
+                    .with_context(|| format!("error parsing strings file: {}", &file.display()))?;
+
+                for text in texts {
+                    let id = TextId::identify(&pkg, &text);
+                    info!("loaded {:?}", &id);
+
+                    pkg.texts.insert(id, text);
+                }
             }
         }
 
@@ -167,41 +238,64 @@ impl Package {
         }
     }
 
+    pub fn name(&self) -> &str {
+        &self.manifest.name
+    }
+
     /// Assembles the package to a mod directory, ready to be compiled by Star Rod.
-    /// This is the core of starpkg.
     pub fn assemble(&mut self, build_dir: &Path) -> Result<()> {
         let _ = fs::create_dir_all(build_dir);
 
-        self.assemble_sprite_table(&build_dir.join("sprite"))?;
+        // Scripts can reference assembled exports, so we'll process them after assembling
+        // everything else.
+        let mut scripts = Vec::new();
+
+        // Sprites.
+        self.assemble_sprites(&build_dir.join("sprite"))?;
+
+        // Texts.
+        self.assemble_strings(&build_dir.join("strings"))?;
+
+        // Actors.
+        scripts.append(&mut self.assemble_actors(&build_dir.join("battle"))?);
+
+        // TODO: assemble battles
+        // TODO: assemble npcs
+        // TODO: assemble maps
+
+        // Assembly is done - time to process + save scripts!
+        for mut script in scripts {
+            script.resolve_expressions(&self.sprites, &self.texts, &self.actors)?;
+            script.save()?;
+        }
 
         Ok(())
     }
 
-    fn assemble_sprite_table(&mut self, sprite_dir: &Path) -> Result<()> {
-        let _ = fs::create_dir_all(sprite_dir);
+    fn assemble_sprites(&mut self, sprites_dir: &Path) -> Result<()> {
+        let _ = fs::create_dir_all(sprites_dir);
 
-        fs::write(sprite_dir.join("SpriteTable.xml"), {
+        fs::write(sprites_dir.join("SpriteTable.xml"), {
             let mut xml = String::new();
             writeln!(xml, r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>"#)?;
             writeln!(xml, "<SpriteTable>")?;
 
             // NPC sprites.
             writeln!(xml, "    <NpcSprites>")?;
-            let mut sprite_index = 1u8;
+            let mut index = 1u8;
             for (sprite_id, sprite) in &mut self.sprites {
                 writeln!(xml, r#"        <Sprite id="{idx:X}" src="{idx:02X}" name="{name}"/>"#,
-                    idx  = sprite_index,
+                    idx  = index,
                     name = sprite_id,
                 )?;
 
-                // Assemble the sprite's directory.
-                let this_dir = sprite_dir.join(format!("npc/src/{:02X}", sprite_index));
-                let _ = fs::create_dir_all(&this_dir);
-                sprite.assemble(&this_dir, sprite_index)?;
+                let sprite_dir = sprites_dir.join(format!("npc/src/{:02X}", index));
+                let _ = fs::create_dir_all(&sprite_dir);
 
-                debug!("assembled npc sprite {} -> {:02X}", &sprite_id, sprite_index);
+                sprite.assemble(&sprite_dir, index)?;
+                debug!("npc sprite {:02X} = {:?}", index, &sprite_id);
 
-                sprite_index += 1;
+                index += 1; // TODO: check overflow
             }
             writeln!(xml, "    </NpcSprites>")?;
 
@@ -213,6 +307,61 @@ impl Package {
         }).with_context(|| "unable to write to SpriteTable.xml")?;
 
         Ok(())
+    }
+
+    fn assemble_strings(&mut self, strings_dir: &Path) -> Result<()> {
+        // Clear the directory.
+        let _ = fs::remove_dir_all(&strings_dir);
+        fs::create_dir_all(strings_dir)?;
+
+        let mut sections = [0u16; 255];
+        for text in self.texts.values_mut() {
+            let section_idx = text.string_section() as usize;
+
+            text.assemble(strings_dir, sections[section_idx])?;
+
+            sections[section_idx] += 1;
+        }
+
+        Ok(())
+    }
+
+    fn assemble_actors(&mut self, battle_dir: &Path) -> Result<Vec<Script>> {
+        let actors_dir = battle_dir.join("formation/import/actor");
+        let _ = fs::create_dir_all(&actors_dir);
+
+        let mut scripts = Vec::new();
+
+        fs::write(battle_dir.join("ActorTypes.xml"), {
+            let mut xml = String::new();
+            writeln!(xml, r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>"#)?;
+            writeln!(xml, "<ActorTypes>")?;
+
+            let mut index = 0u8;
+            for (actor_id, actor) in &mut self.actors {
+                writeln!(xml, r#"   <Actor id="{idx:02X}" name="{name}" tattle="{tattle}"/>"#,
+                    idx  = index,
+                    name = actor.name.resolve(&self.texts)
+                        .with_context(|| format!("actor name not found: {:?}", actor.name))?
+                        .assembled_hex_id()
+                        .expect("actor name string was not assembled"),
+                    tattle = actor.tattle.resolve(&self.texts)
+                        .with_context(|| format!("actor tattle not found: {:?}", actor.tattle))?
+                        .assembled_hex_id()
+                        .expect("actor tattle string was not assembled"),
+                )?;
+
+                scripts.push(actor.assemble(&actors_dir, index)?);
+                debug!("actor {:02X} = {:?}", index, &actor_id);
+
+                index += 1; // TODO: check overflow
+            }
+
+            xml += "</ActorTypes>";
+            xml
+        }).with_context(|| "unable to write to ActorTypes.xml")?;
+
+        Ok(scripts)
     }
 
     /// Writes `self.manifest` to starpkg.toml.
@@ -249,6 +398,12 @@ pub enum LoadError {
 
     #[error("malformed starpkg.toml: {0}")]
     MalformedManifest(#[from] toml::de::Error),
+
+    #[error("dependencies with the same name but different versions found")]
+    MultiDependencyVersionMismatch,
+
+    #[error(transparent)]
+    Other(#[from] Error),
 }
 
 #[derive(Error, Debug)]

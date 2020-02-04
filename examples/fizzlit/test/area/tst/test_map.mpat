@@ -1,4 +1,4 @@
-#import fizzlit/enemy/fizzlit.mpat fizzlit
+#import fizzlit/npc_fizzlit.mpat fizzlit
 
 #new:EntryList $EntryList
 {Vec4f:Entry0}

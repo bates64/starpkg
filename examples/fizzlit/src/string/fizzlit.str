@@ -1,8 +1,8 @@
-#string $Name
+#string:29:(fizzlit_name)
 Fizzlit[END]
 
 % TODO
-#string $Tattle
+#string:1C:(fizzlit_tattle)
 [STYLE:RIGHT][...]
 This is a Fizzlit.
 [WAIT][NEXT][...]
