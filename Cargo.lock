@@ -245,7 +245,7 @@ dependencies = [
 
 [[package]]
 name = "starpkg"
-version = "0.1.0"
+version = "0.2.0-rc.0"
 dependencies = [
  "ansi_term 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "anyhow 1.0.26 (registry+https://github.com/rust-lang/crates.io-index)",
