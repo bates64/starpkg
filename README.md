@@ -35,6 +35,4 @@ Please report any issues, suggestions, questions, etc [on GitHub](https://github
 
 starpkg is licensed under the [Zero-Clause BSD license](https://github.com/nanaian/starpkg/blob/master/LICENSE).
 
-Star Rod, which is included in releases of starpkg, is licensed under the [Apache License](https://github.com/nanaian/starpkg/blob/master/starrod/licenses/LICENSE.txt).
-
-<small>Paper Mario is a trademark of Nintendo of America Inc. Neither starpkg, Star Rod, nor their authors are associated with Nintendo.</small>
+###### Paper Mario is a trademark of Nintendo of America Inc. Neither starpkg nor its authors are associated with Nintendo.
