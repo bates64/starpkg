@@ -8,9 +8,11 @@ starpkg adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). N
 - Scripts can now reference other exports with `{Type:id}` syntax
 - `starpkg new` now creates a `.gitignore` file which ignores the starpkg `.build` directory
 - `starfmt.toml` now supports a `[dependencies]` section where paths to dependencies can be provided using `{ path = "path/to/dependency/package" }` values
+- Windows build
 
 ### Changes
 - `src/sprites` has been renamed to `src/sprite`
+- Split the Unix build into Linux and macOS (in 0.1.0, the Unix build didn't work on MacOS!)
 
 ## [0.1.0] - 2020-02-01
 Initial release.

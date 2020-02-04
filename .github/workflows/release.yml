@@ -41,7 +41,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           body: ""
-          draft: false
+          draft: true
           prerelease: false # See https://github.com/actions/create-release/issues/9
 
       - name: Output release_url.txt
@@ -53,8 +53,8 @@ jobs:
           name: release_url
           path: release_url.txt
 
-  build_unix:
-    name: Build (Linux/MacOS)
+  build_linux:
+    name: Build (Linux)
     needs: release
     runs-on: ubuntu-latest
     steps:
@@ -89,8 +89,8 @@ jobs:
       - name: Zip release binary
         shell: bash
         run: |
-          zip starpkg-unix.zip -9j target/release/starpkg LICENSE CHANGELOG.md
-          zip starpkg-unix.zip -9r starrod
+          zip starpkg-linux.zip -9j target/release/starpkg LICENSE CHANGELOG.md
+          zip starpkg-linux.zip -9r starrod
 
       - name: Upload zip asset to release
         id: upload-release-asset
@@ -99,8 +99,58 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-unix.zip
-          asset_name: starpkg-unix.zip
+          asset_path: ./starpkg-linux.zip
+          asset_name: starpkg-linux.zip
+          asset_content_type: application/zip
+
+  build_macos:
+    name: Build (macOS)
+    needs: release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download release_url.txt artifact from release job
+        uses: actions/download-artifact@v1
+        with:
+          name: release_url
+
+      - name: Read release_url.txt
+        id: release_info
+        shell: bash
+        run: |
+          value=`cat release_url/release_url.txt`
+          echo ::set-output name=upload_url::$value
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: Zip release binary
+        shell: bash
+        run: |
+          zip starpkg-macos.zip -9j target/release/starpkg LICENSE CHANGELOG.md
+          zip starpkg-macos.zip -9r starrod
+
+      - name: Upload zip asset to release
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release_info.outputs.upload_url }}
+          asset_path: ./starpkg-macos.zip
+          asset_name: starpkg-macos.zip
           asset_content_type: application/zip
 
   build_windows:
