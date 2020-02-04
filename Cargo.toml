@@ -1,6 +1,6 @@
 [package]
 name = "starpkg"
-version = "0.2.0-rc.2"
+version = "0.2.0-rc.3"
 description = "A tool for creating composable Paper Mario mods"
 homepage = "https://imalex.xyz/starpkg"
 repository = "https://github.com/nanaian/starpkg"

@@ -86,11 +86,11 @@ jobs:
           command: build
           args: --release
 
-      - name: Zip release binary
+      - name: Compress release binary
         shell: bash
         run: |
           mv target/release/starpkg .
-          tar starpkg-linux.tar.gz -czf starpkg LICENSE CHANGELOG.md
+          tar -czf starpkg-linux.tar.gz starpkg LICENSE CHANGELOG.md
 
       - name: Upload tar.gz asset to release
         id: upload-release-asset
@@ -99,7 +99,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-${{ github.ref }}-linux.tar.gz
+          asset_path: ./starpkg-linux.tar.gz
           asset_name: starpkg-linux.tar.gz
           asset_content_type: application/x-rar-compressed
 
@@ -149,7 +149,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-${{ github.ref }}-macos.zip
+          asset_path: ./starpkg-macos.zip
           asset_name: starpkg-macos.zip
           asset_content_type: application/zip
 
@@ -199,6 +199,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./starpkg-${{ github.ref }}-windows.zip
+          asset_path: ./starpkg-windows.zip
           asset_name: starpkg-windows.zip
           asset_content_type: application/zip
