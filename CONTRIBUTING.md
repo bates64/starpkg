@@ -21,9 +21,10 @@ $ cargo mdbook serve
 When releasing:
 
 - Update the changelog (_Unreleased_ -> New version, add empty _Unreleased_ section)
+- Compress prerelease versions if applicable
 - Bump [Cargo.toml](Cargo.toml) version according to [SemVer](https://semver.org/spec/v2.0.0.html)
 - `git add -A && git commit -m "chore(release): [VERSION]"`
 - `git tag v[VERSION]`
 - `git push && git push --tags`
-- Add the relevant changelog info to the automatically-created [release draft](https://github.com/nanaian/starpkg/releases) and publish it
 - `cargo publish`
+- **Wait for all builds to complete**, then add the relevant changelog info to the automatically-created [release draft](https://github.com/nanaian/starpkg/releases) and publish it
