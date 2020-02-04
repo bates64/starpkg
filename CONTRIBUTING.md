@@ -20,8 +20,7 @@ $ cargo mdbook serve
 
 When releasing:
 
-- Update the changelog (_Unreleased_ -> New version, add empty _Unreleased_ section)
-- Compress prerelease versions if applicable
+- Update the changelog (_Unreleased_ -> New version, add empty _Unreleased_ section, merge prerelease versions into full release if applicable)
 - Bump [Cargo.toml](Cargo.toml) version according to [SemVer](https://semver.org/spec/v2.0.0.html)
 - `git add -A && git commit -m "chore(release): [VERSION]"`
 - `git tag v[VERSION]`

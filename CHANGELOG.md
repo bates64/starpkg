@@ -4,9 +4,13 @@ starpkg adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). N
 
 ## [Unreleased]
 
+## [0.2.0-rc.2] - 2020-02-04
+### Fixes
+- Fix the build for real this time
+
 ## [0.2.0-rc.1] - 2020-02-04
 ### Fixes
-- Fixed the build, including crates.io upload
+- ~~Fixed the build, including crates.io upload~~
 
 ## [0.2.0-rc.0] - 2020-02-04 [NO BUILD AVAILABLE]
 ### Additions
