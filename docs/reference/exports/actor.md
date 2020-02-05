@@ -1,13 +1,13 @@
 # Actor
 
-Actors are battle-participating entities, typically enemies. They are located in the
-`src/actor/NAME` directory.
+`src/actor/<name>` directories. Actors are battle-participating entities, eg. enemies.
 
-### `NAME.toml`
+### `<name>.toml`
 
-A TOML file with two [string](string.md) identifiers: `name` and `tattle`.
+A TOML file with two [string](string.md) identifiers: `name` and `tattle`. These correspond to what
+will be displayed ingame with respect to this actor - the starpkg `<name>` is for identifiers only.
 
-### `NAME.bscr`
+### `<name>.bscr`
 
-A [script](../scripts.md) exporting a new Actor struct named `$Actor`. The `[Index]` field of the
-struct should be the [`{Actor:NAME}` reference expression](../scripts.md#reference-expressions).
+A [script](../scripts.md) defining a new Actor struct named `$Actor`. The `[Index]` field of the
+struct should be the [`{Actor:<name>}` reference expression](../scripts.md#reference-expressions).

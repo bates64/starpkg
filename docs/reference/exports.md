@@ -6,14 +6,10 @@ packages.
 
 ### Identifiers
 
-Exports can cross-reference eachother using identifiers in the form `package_name/export_name`. If
+Exports can cross-reference eachother using identifiers in the form `<package>/<export>`. If
 a package name is not provided (ie. the identifier is just a bare export name), it is assumed to be
 the name of the package which provides the export.
 
-### Export types
-
-Types of exports include:
-
-- [string](exports/string.md)
-- [sprite](exports/sprite.md)
-- [actor](exports/actor.md)
+Export names:
+- cannot contain punctuation other than underscores
+- must be unique in its export type group of packages, ie. a package cannot define two sprites named the same, but may name a string and an actor the same

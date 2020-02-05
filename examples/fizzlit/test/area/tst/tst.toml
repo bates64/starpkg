@@ -1,8 +1,0 @@
-[maps]
-# test_map is implied because test_map.mpat exists
-
-[stages]
-stage_plain = { foreground_models = [] }
-
-[battles]
-fizzlit_2x = { stage = "stage_plain", actors = 2 }

@@ -1,0 +1,9 @@
+stage = "plain"
+
+[[formation]]
+actor = "fizzlit/fizzlit"
+home = 1
+
+[[formation]]
+actor = "fizzlit/fizzlit"
+home = 2

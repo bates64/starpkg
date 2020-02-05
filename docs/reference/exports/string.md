@@ -1,7 +1,6 @@
 # String
 
-String files are located in the `src/string` directory and have the `str` file extension. Each
-individual string found in these files is itself a "string export".
+`src/string/*.str` files. Each individual string found in these files is itself an export.
 
 Unlike Star Rod's `str` files, starpkg string exports are limited to being named:
 

@@ -1,9 +1,0 @@
-% TODO: make sure these settings are correct.
-#new:NpcSettings $NpcSettings
-00000000 00180018 00000000 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00630000
-
-% TODO: squishing down every so often while idle, etc.
-#new:Script $Script_Init
-    Return
-    End

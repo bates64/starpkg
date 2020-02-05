@@ -1,5 +1,3 @@
-#import fizzlit/npc_fizzlit.mpat fizzlit
-
 #new:EntryList $EntryList
 {Vec4f:Entry0}
 
@@ -25,9 +23,19 @@
 00000000 00000000 00000000
 
 #new:NpcGroup $NpcGroup_Fizzlit0
-00000001 $fizzlit:NpcSettings {Vec3f:NPC_Fizzlit0}
-00140B00 $fizzlit:Script_Init 00000001 FFFFFD76 00000140 % TODO: NPC flags
+00000001 $NpcSettings_Fizzlit {Vec3f:NPC_Fizzlit0}
+00140B00 $Script_Init_Fizzlit 00000001 FFFFFD76 00000140 % TODO: NPC flags
 {NoItems} {NoHP} {NoFP} {NoCoinBonus}
 {Movement:NPC_Fizzlit0}
 {AnimationTable:NPC_Fizzlit0}
 00000000 00000000 00000000 00000000
+
+% TODO: import npcsettings/init script from 'npc' export or something
+
+#new:NpcSettings $NpcSettings_Fizzlit
+00000000 00180018 00000000 00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00630000
+
+#new:Script $Script_Init_Fizzlit
+    Return
+    End
