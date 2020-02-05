@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="../intro.html">Introduction</a></li><li class="expanded "><a href="../getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="expanded "><a href="../getting-started/create-package.html"><strong aria-hidden="true">1.2.</strong> Creating a package</a></li></ol></li><li class="expanded "><a href="../reference.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="expanded "><a href="../reference/packages.html"><strong aria-hidden="true">2.1.</strong> Packages</a></li><li class="expanded "><a href="../reference/exports.html" class="active"><strong aria-hidden="true">2.2.</strong> Exports</a></li><li><ol class="section"><li class="expanded "><a href="../reference/exports/string.html"><strong aria-hidden="true">2.2.1.</strong> String</a></li><li class="expanded "><a href="../reference/exports/sprite.html"><strong aria-hidden="true">2.2.2.</strong> Sprite</a></li><li class="expanded "><a href="../reference/exports/actor.html"><strong aria-hidden="true">2.2.3.</strong> Actor</a></li></ol></li><li class="expanded "><a href="../reference/scripts.html"><strong aria-hidden="true">2.3.</strong> Scripts</a></li></ol></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="../intro.html">Introduction</a></li><li class="expanded "><a href="../getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="expanded "><a href="../getting-started/create-package.html"><strong aria-hidden="true">1.2.</strong> Creating a package</a></li></ol></li><li class="expanded "><a href="../reference.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="expanded "><a href="../reference/packages.html"><strong aria-hidden="true">2.1.</strong> Packages</a></li><li class="expanded "><a href="../reference/exports.html" class="active"><strong aria-hidden="true">2.2.</strong> Exports</a></li><li><ol class="section"><li class="expanded "><a href="../reference/exports/string.html"><strong aria-hidden="true">2.2.1.</strong> String</a></li><li class="expanded "><a href="../reference/exports/sprite.html"><strong aria-hidden="true">2.2.2.</strong> Sprite</a></li><li class="expanded "><a href="../reference/exports/actor.html"><strong aria-hidden="true">2.2.3.</strong> Actor</a></li><li class="expanded "><a href="../reference/exports/battle.html"><strong aria-hidden="true">2.2.4.</strong> Battle</a></li><li class="expanded "><a href="../reference/exports/map.html"><strong aria-hidden="true">2.2.5.</strong> Map</a></li><li class="expanded "><a href="../reference/exports/stage.html"><strong aria-hidden="true">2.2.6.</strong> Stage</a></li></ol></li><li class="expanded "><a href="../reference/scripts.html"><strong aria-hidden="true">2.3.</strong> Scripts</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -157,15 +157,13 @@
 ultimately, will be compiled into the mod itself. Exports are found in the <code>src</code> directory of
 packages.</p>
 <h3><a class="header" href="#identifiers" id="identifiers">Identifiers</a></h3>
-<p>Exports can cross-reference eachother using identifiers in the form <code>package_name/export_name</code>. If
+<p>Exports can cross-reference eachother using identifiers in the form <code>&lt;package&gt;/&lt;export&gt;</code>. If
 a package name is not provided (ie. the identifier is just a bare export name), it is assumed to be
 the name of the package which provides the export.</p>
-<h3><a class="header" href="#export-types" id="export-types">Export types</a></h3>
-<p>Types of exports include:</p>
+<p>Export names:</p>
 <ul>
-<li><a href="exports/string.html">string</a></li>
-<li><a href="exports/sprite.html">sprite</a></li>
-<li><a href="exports/actor.html">actor</a></li>
+<li>cannot contain punctuation other than underscores</li>
+<li>must be unique in its export type group of packages, ie. a package cannot define two sprites named the same, but may name a string and an actor the same</li>
 </ul>
 
                     </main>

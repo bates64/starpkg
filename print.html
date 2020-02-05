@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="intro.html">Introduction</a></li><li class="expanded "><a href="getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="expanded "><a href="getting-started/create-package.html"><strong aria-hidden="true">1.2.</strong> Creating a package</a></li></ol></li><li class="expanded "><a href="reference.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="expanded "><a href="reference/packages.html"><strong aria-hidden="true">2.1.</strong> Packages</a></li><li class="expanded "><a href="reference/exports.html"><strong aria-hidden="true">2.2.</strong> Exports</a></li><li><ol class="section"><li class="expanded "><a href="reference/exports/string.html"><strong aria-hidden="true">2.2.1.</strong> String</a></li><li class="expanded "><a href="reference/exports/sprite.html"><strong aria-hidden="true">2.2.2.</strong> Sprite</a></li><li class="expanded "><a href="reference/exports/actor.html"><strong aria-hidden="true">2.2.3.</strong> Actor</a></li></ol></li><li class="expanded "><a href="reference/scripts.html"><strong aria-hidden="true">2.3.</strong> Scripts</a></li></ol></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="intro.html">Introduction</a></li><li class="expanded "><a href="getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="expanded "><a href="getting-started/create-package.html"><strong aria-hidden="true">1.2.</strong> Creating a package</a></li></ol></li><li class="expanded "><a href="reference.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="expanded "><a href="reference/packages.html"><strong aria-hidden="true">2.1.</strong> Packages</a></li><li class="expanded "><a href="reference/exports.html"><strong aria-hidden="true">2.2.</strong> Exports</a></li><li><ol class="section"><li class="expanded "><a href="reference/exports/string.html"><strong aria-hidden="true">2.2.1.</strong> String</a></li><li class="expanded "><a href="reference/exports/sprite.html"><strong aria-hidden="true">2.2.2.</strong> Sprite</a></li><li class="expanded "><a href="reference/exports/actor.html"><strong aria-hidden="true">2.2.3.</strong> Actor</a></li><li class="expanded "><a href="reference/exports/battle.html"><strong aria-hidden="true">2.2.4.</strong> Battle</a></li><li class="expanded "><a href="reference/exports/map.html"><strong aria-hidden="true">2.2.5.</strong> Map</a></li><li class="expanded "><a href="reference/exports/stage.html"><strong aria-hidden="true">2.2.6.</strong> Stage</a></li></ol></li><li class="expanded "><a href="reference/scripts.html"><strong aria-hidden="true">2.3.</strong> Scripts</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -289,33 +289,70 @@ that semantic versioning is adhered to by package authors, but this is not enfor
 ultimately, will be compiled into the mod itself. Exports are found in the <code>src</code> directory of
 packages.</p>
 <h3><a class="header" href="#identifiers" id="identifiers">Identifiers</a></h3>
-<p>Exports can cross-reference eachother using identifiers in the form <code>package_name/export_name</code>. If
+<p>Exports can cross-reference eachother using identifiers in the form <code>&lt;package&gt;/&lt;export&gt;</code>. If
 a package name is not provided (ie. the identifier is just a bare export name), it is assumed to be
 the name of the package which provides the export.</p>
-<h3><a class="header" href="#export-types" id="export-types">Export types</a></h3>
-<p>Types of exports include:</p>
+<p>Export names:</p>
 <ul>
-<li><a href="reference/exports/string.html">string</a></li>
-<li><a href="reference/exports/sprite.html">sprite</a></li>
-<li><a href="reference/exports/actor.html">actor</a></li>
+<li>cannot contain punctuation other than underscores</li>
+<li>must be unique in its export type group of packages, ie. a package cannot define two sprites named the same, but may name a string and an actor the same</li>
 </ul>
 <h1><a class="header" href="#string" id="string">String</a></h1>
-<p>String files are located in the <code>src/string</code> directory and have the <code>str</code> file extension. Each
-individual string found in these files is itself a “string export”.</p>
+<p><code>src/string/*.str</code> files. Each individual string found in these files is itself an export.</p>
 <p>Unlike Star Rod’s <code>str</code> files, starpkg string exports are limited to being named:</p>
 <pre><code class="language-str">#string 00:(name)
 This is a string.[END]
 </code></pre>
 <h1><a class="header" href="#sprite" id="sprite">Sprite</a></h1>
-<p>Sprites are located in <code>src/sprite/NAME</code> directories and have no differences sprites in Star Rod.</p>
+<p><code>src/sprite/&lt;name&gt;</code> directories.</p>
+<h3><a class="header" href="#spritesheetxml" id="spritesheetxml"><code>SpriteSheet.xml</code></a></h3>
+<p>A file holding animation data for this sprite, edited via Star Rod. In the future, a command will be
+made available to easily edit sprite animations with a GUI.</p>
 <h1><a class="header" href="#actor" id="actor">Actor</a></h1>
-<p>Actors are battle-participating entities, typically enemies. They are located in the
-<code>src/actor/NAME</code> directory.</p>
-<h3><a class="header" href="#nametoml" id="nametoml"><code>NAME.toml</code></a></h3>
-<p>A TOML file with two <a href="reference/exports/string.html">string</a> identifiers: <code>name</code> and <code>tattle</code>.</p>
-<h3><a class="header" href="#namebscr" id="namebscr"><code>NAME.bscr</code></a></h3>
-<p>A <a href="reference/exports/../scripts.html">script</a> exporting a new Actor struct named <code>$Actor</code>. The <code>[Index]</code> field of the
-struct should be the <a href="reference/exports/../scripts.html#reference-expressions"><code>{Actor:NAME}</code> reference expression</a>.</p>
+<p><code>src/actor/&lt;name&gt;</code> directories. Actors are battle-participating entities, eg. enemies.</p>
+<h3><a class="header" href="#nametoml" id="nametoml"><code>&lt;name&gt;.toml</code></a></h3>
+<p>A TOML file with two <a href="reference/exports/string.html">string</a> identifiers: <code>name</code> and <code>tattle</code>. These correspond to what
+will be displayed ingame with respect to this actor - the starpkg <code>&lt;name&gt;</code> is for identifiers only.</p>
+<h3><a class="header" href="#namebscr" id="namebscr"><code>&lt;name&gt;.bscr</code></a></h3>
+<p>A <a href="reference/exports/../scripts.html">script</a> defining a new Actor struct named <code>$Actor</code>. The <code>[Index]</code> field of the
+struct should be the <a href="reference/exports/../scripts.html#reference-expressions"><code>{Actor:&lt;name&gt;}</code> reference expression</a>.</p>
+<h1><a class="header" href="#battle" id="battle">Battle</a></h1>
+<p><code>src/battle/&lt;name&gt;</code> directories.</p>
+<h3><a class="header" href="#nametoml-1" id="nametoml-1"><code>&lt;name&gt;.toml</code></a></h3>
+<p>A TOML file with the following fields:</p>
+<h4><a class="header" href="#stage" id="stage"><code>stage</code></a></h4>
+<p>A <a href="reference/exports/stage.html">stage</a> identifier where this battle is to place.</p>
+<h4><a class="header" href="#formation" id="formation"><code>formation</code></a></h4>
+<p>Describes the actors that appear in formation when this battle begins.
+An array of tables with the following fields:</p>
+<ul>
+<li><code>actor</code> - An <a href="reference/exports/actor.html">actor</a> identifier.</li>
+<li><code>home</code> - The home position of the actor; either an integer or a <code>{ x, y, z }</code> vector.</li>
+</ul>
+<h1><a class="header" href="#map" id="map">Map</a></h1>
+<p><code>src/map/&lt;name&gt;</code> directories.</p>
+<h3><a class="header" href="#namexml" id="namexml"><code>&lt;name&gt;.xml</code></a></h3>
+<p>The map data itself, generated/edited via Star Rod. In the future, a command will be made available
+to easily edit maps with a GUI.</p>
+<p>The texture set and background image this file uses will be replicated ingame.</p>
+<h3><a class="header" href="#namemscr" id="namemscr"><code>&lt;name&gt;.mscr</code></a></h3>
+<p>A <a href="reference/exports/../scripts.html">script</a> defining a new Script_Main struct named <code>$Script_Main</code>.</p>
+<p>Map scripts may optionally define a string called <code>$Tattle</code>, which will be used as the map’s tattle.</p>
+<p>The Header struct will be automatically generated - do not provide one. Additionally, it is
+forbidden for a map to define a Script_Init struct at the moment.</p>
+<h1><a class="header" href="#stage-1" id="stage-1">Stage</a></h1>
+<p><code>src/stage/&lt;name&gt;</code> directories. A stage is a special kind of map where <a href="reference/exports/battle.html">battles</a> take
+place.</p>
+<h3><a class="header" href="#nametoml-2" id="nametoml-2"><code>&lt;name&gt;.toml</code></a></h3>
+<h4><a class="header" href="#foreground_models" id="foreground_models"><code>foreground_models</code></a></h4>
+<p>An array of strings each referencing a model found in <code>&lt;name&gt;.xml</code> which appears in the foreground
+(ie. infront of the actors).</p>
+<h3><a class="header" href="#namexml-1" id="namexml-1"><code>&lt;name&gt;.xml</code></a></h3>
+<p>The map data itself, generated/edited via Star Rod. In the future, a command will be made available
+to easily edit stage maps with a GUI.</p>
+<h3><a class="header" href="#namebpat" id="namebpat"><code>&lt;name&gt;.bpat</code></a></h3>
+<p>A <a href="reference/exports/../scripts.html">script</a> defining two new Script structs named <code>$Script_BeforeBattle</code> and
+<code>$Script_AfterBattle</code>.</p>
 <h1><a class="header" href="#scripts" id="scripts">Scripts</a></h1>
 <p>Some exports, such as <a href="reference/../exports/actor.html">actors</a>, require scripting. This is done in the same way
 as in Star Rod (ie. <code>mscr</code>/<code>bscr</code> files), albeit with a few starpkg-specific preprocessing features.</p>
