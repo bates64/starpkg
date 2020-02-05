@@ -6,30 +6,7 @@
 [![Discord Channel](https://img.shields.io/discord/279322074412089344?color=7289DA&logo=discord&logoColor=fff)](https://discord.gg/xzq6egG)
 [![License](https://img.shields.io/github/license/nanaian/starpkg)](https://github.com/nanaian/starpkg/blob/master/LICENSE)
 
-starpkg is a tool for creating composable _Paper Mario_ mods.
-
-
-## Installation
-
-* Precompiled:
-    - Windows, macOS, and Linux builds are [available here](https://github.com/nanaian/starpkg/releases/latest)
-    - Add the `starpkg`/`starpkg.exe` binary to your PATH
-* Build from source:
-    - Install Rust with [rustup](https://rustup.rs)
-    - `cargo install starpkg`
-
-You can then use starpkg in any terminal/command prompt as `starpkg`.
-
-
-## [Documentation](https://imalex.xyz/starpkg)
-
-Documentation for starpkg can be found [here](https://imalex.xyz/starpkg).
-
-
-## Issues
-
-Please report any issues, suggestions, questions, etc [on GitHub](https://github.com/nanaian/starpkg/issues). For general support, [join our Discord channel](https://discord.gg/xzq6egG).
-
+starpkg is a tool for creating composable _Paper Mario_ mods. [To get started, see the user guide.](https://imalex.xyz/starpkg)
 
 ## Legal
 

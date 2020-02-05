@@ -25,5 +25,4 @@ When releasing:
 - `git add -A && git commit -m "chore(release): [VERSION]"`
 - `git tag v[VERSION]`
 - `git push && git push --tags`
-- `cargo publish`
 - **Wait for all builds to complete**, then add the relevant changelog info to the automatically-created [release draft](https://github.com/nanaian/starpkg/releases) and publish it
