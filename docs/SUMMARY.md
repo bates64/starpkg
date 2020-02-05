@@ -1,6 +1,6 @@
 # Summary
 
-[starpkg](../README.md)
+[Introduction](intro.md)
 
 - [Getting Started](getting-started.md)
     - [Installation](getting-started/installation.md)
