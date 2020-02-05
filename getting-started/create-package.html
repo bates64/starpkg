@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>starpkg - starpkg user guide</title>
+        <title>Creating a package - starpkg user guide</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -11,21 +11,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
         
@@ -35,7 +35,7 @@
     <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
         </script>
 
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="../index.html">starpkg</a></li><li class="expanded "><a href="getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="expanded "><a href="getting-started/create-package.html"><strong aria-hidden="true">1.2.</strong> Creating a package</a></li></ol></li><li class="expanded "><a href="reference.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="expanded "><a href="reference/packages.html"><strong aria-hidden="true">2.1.</strong> Packages</a></li><li class="expanded "><a href="reference/exports.html"><strong aria-hidden="true">2.2.</strong> Exports</a></li><li><ol class="section"><li class="expanded "><a href="reference/exports/string.html"><strong aria-hidden="true">2.2.1.</strong> String</a></li><li class="expanded "><a href="reference/exports/sprite.html"><strong aria-hidden="true">2.2.2.</strong> Sprite</a></li><li class="expanded "><a href="reference/exports/actor.html"><strong aria-hidden="true">2.2.3.</strong> Actor</a></li></ol></li><li class="expanded "><a href="reference/scripts.html"><strong aria-hidden="true">2.3.</strong> Scripts</a></li></ol></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="../../index.html">starpkg</a></li><li class="expanded "><a href="../getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="expanded "><a href="../getting-started/create-package.html" class="active"><strong aria-hidden="true">1.2.</strong> Creating a package</a></li></ol></li><li class="expanded "><a href="../reference.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="expanded "><a href="../reference/packages.html"><strong aria-hidden="true">2.1.</strong> Packages</a></li><li class="expanded "><a href="../reference/exports.html"><strong aria-hidden="true">2.2.</strong> Exports</a></li><li><ol class="section"><li class="expanded "><a href="../reference/exports/string.html"><strong aria-hidden="true">2.2.1.</strong> String</a></li><li class="expanded "><a href="../reference/exports/sprite.html"><strong aria-hidden="true">2.2.2.</strong> Sprite</a></li><li class="expanded "><a href="../reference/exports/actor.html"><strong aria-hidden="true">2.2.3.</strong> Actor</a></li></ol></li><li class="expanded "><a href="../reference/scripts.html"><strong aria-hidden="true">2.3.</strong> Scripts</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -116,7 +116,7 @@
                         <h1 class="menu-title">starpkg user guide</h1>
 
                         <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <a href="../print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
                             
@@ -152,25 +152,69 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#-starpkg" id="-starpkg">📦 starpkg</a></h1>
-<p><a href="https://github.com/nanaian/starpkg/releases/latest"><img src="https://img.shields.io/github/downloads/nanaian/starpkg/total?logo=github" alt="Release" /></a>
-<a href="https://imalex.xyz/starpkg"><img src="https://img.shields.io/static/v1?label=docs&amp;message=online&amp;color=blue" alt="Documentation" /></a>
-<a href="https://crates.io/crates/starpkg"><img src="https://img.shields.io/crates/v/starpkg" alt="Crate" /></a>
-<a href="https://discord.gg/xzq6egG"><img src="https://img.shields.io/discord/279322074412089344?color=7289DA&amp;logo=discord&amp;logoColor=fff" alt="Discord Channel" /></a>
-<a href="https://github.com/nanaian/starpkg/blob/master/LICENSE"><img src="https://img.shields.io/github/license/nanaian/starpkg" alt="License" /></a></p>
-<p>starpkg is a tool for creating composable <em>Paper Mario</em> mods. <a href="https://imalex.xyz/starpkg">To get started, see the user guide.</a></p>
-<h2><a class="header" href="#legal" id="legal">Legal</a></h2>
-<p>starpkg is licensed under the <a href="https://github.com/nanaian/starpkg/blob/master/LICENSE">Zero-Clause BSD license</a>.</p>
-<h6><a class="header" href="#paper-mario-is-a-trademark-of-nintendo-of-america-inc-neither-starpkg-nor-its-authors-are-associated-with-nintendo" id="paper-mario-is-a-trademark-of-nintendo-of-america-inc-neither-starpkg-nor-its-authors-are-associated-with-nintendo">Paper Mario is a trademark of Nintendo of America Inc. Neither starpkg nor its authors are associated with Nintendo.</a></h6>
+                        <h1><a class="header" href="#creating-a-package" id="creating-a-package">Creating a package</a></h1>
+<p>Lets make a basic mod! In starpkg, mods are called <em>packages</em>.</p>
+<h2><a class="header" href="#making-a-new-package-directory-with-starpkg-new" id="making-a-new-package-directory-with-starpkg-new">Making a new package directory with <code>starpkg new</code></a></h2>
+<p>To create a new package, run <code>starpkg new &lt;name of package&gt;</code> in an empty directory:</p>
+<pre><code class="language-text">$ mkdir first_package
+$ cd first_package
+
+$ starpkg new first_package
+info: created package first_package v0.1.0 at ~/first_package
+</code></pre>
+<p>(<code>starpkg new</code> will automatically create a directory for the package if the current one is not
+empty.)</p>
+<blockquote>
+<p><strong>What do <code>mkdir</code> and <code>cd</code> do?</strong></p>
+<p>These commands create a new directory, and open one, respectively. If you want to learn more,
+<a href="https://www.dummies.com/computers/operating-systems/linux/common-linux-commands/">see this table</a>. Most of the commands listed are also supported by PowerShell.</p>
+</blockquote>
+<p>By default, <code>starpkg new</code> creates a <code>starpkg.toml</code> file and an empty <code>src</code> directory. It also
+creates a <code>.gitignore</code> file, but we don’t need to worry about it for now.</p>
+<h3><a class="header" href="#starpkgtoml" id="starpkgtoml">starpkg.toml</a></h3>
+<p>Let’s look at <code>starpkg.toml</code> first. Open it in your favourite text editor and you’ll see something
+like:</p>
+<pre><code class="language-toml">name = &quot;first_package&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+pm64 = &quot;*&quot;
+</code></pre>
+<p>This file, also known as the <em>package manifest</em>, declares metadata about a package, like its name,
+version number, and its dependencies. We’ll talk more about dependencies and version numbers later.</p>
+<blockquote>
+<p><strong>What’s a TOML file?</strong></p>
+<p>TOML stands for <a href="https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.5.0.md">“Tom’s Obvious, Minimal Language”</a>. starpkg uses it for most of its
+configuration files. If you’re using Visual Studio Code, you can get syntax highlighting for TOML
+files by installing <a href="https://marketplace.visualstudio.com/items?itemName=be5invis.toml">this extension</a>.</p>
+</blockquote>
+<h3><a class="header" href="#src" id="src">src</a></h3>
+<p>The <code>src</code> (short for “source”) directory starts off empty, but it is the most important part of your
+package. It holds all the new enemies, badges, maps, etc your package adds to the game. As a group,
+these are referred to as <em>exports</em>.</p>
+<h2><a class="header" href="#compiling-into-a-rom-with-starpkg-build" id="compiling-into-a-rom-with-starpkg-build">Compiling into a rom with <code>starpkg build</code></a></h2>
+<p>The <code>starpkg build</code> command assembles the package and its dependencies into a Star Rod ‘mod
+folder.’ In the future, this command will also have Star Rod compile the mod folder into a working
+modded <em>Paper Mario</em> rom.</p>
+<pre><code>$ starpkg build
+info: assembled first_package v0.1.0 in 0.00458s
+</code></pre>
+<p>If you’re interested, you can view the mod folder that starpkg builds by viewing the created
+<code>.build</code> directory. However, do not make any changes there as subsequent <code>starpkg build</code>s will
+overwrite your changes!</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="../getting-started/installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="getting-started.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../reference.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -182,9 +226,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a href="../getting-started/installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a href="getting-started.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../reference.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -207,14 +255,14 @@
         
 
         
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
         
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
         
