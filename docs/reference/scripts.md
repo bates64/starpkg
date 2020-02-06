@@ -18,10 +18,10 @@ and it supercedes Star Rod's `{String:name}` syntax.
 ### `{Sprite:identifier}`
 Expands to the numeric index of the given sprite, padded to two hex digits.
 
-### `{Sprite:identifier:animation}
+### `{Sprite:identifier:animation}`
 Expands to `00II00AA`, ie. the value representing the given sprite performing the given animation.
 
-### `{Sprite:identifier:animation:palette}
+### `{Sprite:identifier:animation:palette}`
 Expands to `00IIPPAA`, ie. the value representing the given sprite performing the given animation
 with the given palette.
 

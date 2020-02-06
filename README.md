@@ -7,7 +7,7 @@
 [![Discord Channel](https://img.shields.io/discord/279322074412089344?color=7289DA&logo=discord&logoColor=fff)](https://discord.gg/xzq6egG)
 [![License](https://img.shields.io/github/license/nanaian/starpkg)](https://github.com/nanaian/starpkg/blob/master/LICENSE)
 
-starpkg is a tool for creating composable _Paper Mario_ mods. [To get started, see the user guide.](https://imalex.xyz/starpkg/getting-started.html)
+starpkg is a tool for creating composable _Paper Mario_ mods. [To get started, see the user guide.](https://imalex.xyz/starpkg)
 
 ## Legal
 
