@@ -164,17 +164,14 @@ enter in a terminal all start with <code>$</code>. You don’t need to type in t
 the start of a command. Lines without a <code>$</code> are typically the output of the previous command.</p>
 <p>On Windows, we recommend you use PowerShell rather than Command Prompt.</p>
 </blockquote>
-<h3><a class="header" href="#installing-on-linux" id="installing-on-linux">Installing on Linux</a></h3>
-<p>If you’re using Linux or <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a>, execute the following command:</p>
-<pre><code class="language-sh">$ curl -sSLf &quot;https://gist.githubusercontent.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6/raw/starpkg-linux.sh&quot; | sh
-</code></pre>
-<h3><a class="header" href="#installing-on-macos" id="installing-on-macos">Installing on macOS</a></h3>
-<p>If you’re using macOS, open Terminal and execute the following command:</p>
-<pre><code class="language-sh">$ curl -sSLf &quot;https://gist.githubusercontent.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6/raw/starpkg-macos.sh&quot; | sh
+<h3><a class="header" href="#installing-on-linux-macos-or-wsl" id="installing-on-linux-macos-or-wsl">Installing on Linux, macOS, or WSL</a></h3>
+<p>If you’re using Linux, macOS, or <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a>, execute the following command
+in a terminal:</p>
+<pre><code class="language-sh">$ curl -sSLf &quot;https://git.io/JvZKc&quot; | sh
 </code></pre>
 <h3><a class="header" href="#installing-on-windows" id="installing-on-windows">Installing on Windows</a></h3>
 <p>If you’re using Windows, open PowerShell and execute the following command:</p>
-<pre><code class="language-sh">$ iex ((New-Object System.Net.WebClient).DownloadString('https://gist.githubusercontent.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6/raw/starpkg-windows.ps1'))
+<pre><code class="language-sh">$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvZKl'))
 </code></pre>
 <h3><a class="header" href="#building-from-source" id="building-from-source">Building from source</a></h3>
 <p>If the above methods don’t work on your OS for whatever reason, you can compile starpkg yourself:</p>
