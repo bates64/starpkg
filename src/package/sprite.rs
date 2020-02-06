@@ -35,13 +35,51 @@ impl fmt::Debug for SpriteId {
 pub struct Sprite {
     dir: PathBuf,
 
+    palettes: Vec<String>,
+    animations: Vec<String>,
+
     assembled_index: u8, // Zero => unassembled.
 }
 
 impl Sprite {
-    pub fn load(_: &str, dir: PathBuf) -> Sprite {
-        // TODO: load SpriteSheet.xml etc
-        Sprite { dir, assembled_index: 0 }
+    pub fn load(_: &str, dir: &Path) -> Result<Sprite, SpriteLoadError> {
+        let spritesheet = fs::read_to_string(dir.join("SpriteSheet.xml"))
+            .map_err(|err| SpriteLoadError::MissingSpriteSheet(err))?;
+        let spritesheet = roxmltree::Document::parse(&spritesheet)
+            .map_err(|err| SpriteLoadError::MalformedSpriteSheet(err))?;
+
+        Ok(Sprite {
+            palettes: spritesheet
+                .root_element()
+                .children()
+                .find(|n| n.tag_name().name() == "PaletteList")
+                .ok_or(SpriteLoadError::SpriteSheetMissingPaletteList)?
+                .children()
+                .filter(|n| n.is_element())
+                .enumerate()
+                .map(|(idx, n)| match n.attribute("name") {
+                    Some(attr) => attr.to_string(),
+                    None => format!("{:X}", idx),
+                })
+                .collect(),
+
+            animations: spritesheet
+                .root_element()
+                .children()
+                .find(|n| n.tag_name().name() == "AnimationList")
+                .ok_or(SpriteLoadError::SpriteSheetMissingAnimationList)?
+                .children()
+                .filter(|n| n.is_element())
+                .enumerate()
+                .map(|(idx, n)| match n.attribute("name") {
+                    Some(attr) => attr.to_string(),
+                    None => format!("{:X}", idx),
+                })
+                .collect(),
+
+            dir: dir.to_owned(),
+            assembled_index: 0,
+        })
     }
 
     pub fn name(&self) -> String {
@@ -76,4 +114,27 @@ impl Sprite {
 
         Ok(())
     }
+
+    pub fn palette_by_name(&self, name: &str) -> Option<usize> {
+        self.palettes.iter().position(|n| n == name)
+    }
+
+    pub fn animation_by_name(&self, name: &str) -> Option<usize> {
+        self.animations.iter().position(|n| n == name)
+    }
+}
+
+#[derive(Error, Debug)]
+pub enum SpriteLoadError {
+    #[error("missing SpriteSheet.xml")]
+    MissingSpriteSheet(#[source] io::Error),
+
+    #[error("malformed SpriteSheet.xml")]
+    MalformedSpriteSheet(#[source] roxmltree::Error),
+
+    #[error("SpriteSheet.xml is missing PaletteList")]
+    SpriteSheetMissingPaletteList,
+
+    #[error("SpriteSheet.xml is missing PaletteList")]
+    SpriteSheetMissingAnimationList,
 }

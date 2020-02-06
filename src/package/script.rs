@@ -121,8 +121,8 @@ impl Script {
     /// Resolves expressions:
     ///
     /// - `{Sprite:id}`
-    /// - `{Sprite:id:anim}` - TODO
-    /// - `{Sprite:id:anim:palette} - TODO
+    /// - `{Sprite:id:anim}`
+    /// - `{Sprite:id:anim:palette}
     /// - `{String:id}` - overloads Star Rod's
     /// - `{Actor:id}`
     pub fn resolve_expressions(
@@ -136,6 +136,14 @@ impl Script {
         lazy_static! {
             static ref SPRITE_ID: Regex = Regex::new(
                 r"\{Sprite:([^:}]*)\}"
+            ).unwrap();
+
+            static ref SPRITE_ID_ANIM: Regex = Regex::new(
+                r"\{Sprite:([^:}]*):([^:}]*)\}"
+            ).unwrap();
+
+            static ref SPRITE_ID_ANIM_PALETTE: Regex = Regex::new(
+                r"\{Sprite:([^:}]*):([^:}]*):([^:}]*)\}"
             ).unwrap();
 
             static ref STRING_ID: Regex = Regex::new(
@@ -181,14 +189,84 @@ impl Script {
                             parse_error: err,
                         })?;
 
-                        match id.resolve(sprites) {
-                            Some(sprite) => Ok(format!("{:02X}",
-                                sprite
-                                    .assembled_index()
-                                    .expect("unassembled sprite")
-                            )),
-                            None => Err(UnknownSprite { path: self.path.clone(), line_no, id }),
-                        }
+                    match id.resolve(sprites) {
+                        Some(sprite) => Ok(format!("{:02X}",
+                            sprite
+                                .assembled_index()
+                                .expect("unassembled sprite")
+                        )),
+                        None => Err(UnknownSprite { path: self.path.clone(), line_no, id }),
+                    }
+                })?;
+
+                // {Sprite:id:anim}
+                line = replace(&SPRITE_ID_ANIM, &line, |g| {
+                    let id = g.get(1).unwrap().as_str();
+                    let id = SpriteId::parse(id, &self.src_pkg_name)
+                        .map_err(|err| IdParseError {
+                            path: self.path.clone(),
+                            line_no,
+                            id_string: id.to_string(),
+                            parse_error: err,
+                        })?;
+
+                    let anim = g.get(2).unwrap().as_str();
+
+                    match id.resolve(sprites) {
+                        Some(sprite) => Ok(format!(
+                            "00{index:02X}00{anim:02X}",
+                            index = sprite
+                                .assembled_index()
+                                .expect("unassembled sprite"),
+                            anim = sprite.animation_by_name(anim)
+                                .ok_or_else(|| SpriteLacksAnimation {
+                                    path: self.path.clone(),
+                                    line_no,
+                                    id,
+                                    animation: anim.to_string(),
+                                })?
+                        )),
+                        None => Err(UnknownSprite { path: self.path.clone(), line_no, id }),
+                    }
+                })?;
+
+                // {Sprite:id:anim:palette}
+                line = replace(&SPRITE_ID_ANIM_PALETTE, &line, |g| {
+                    let id = g.get(1).unwrap().as_str();
+                    let id = SpriteId::parse(id, &self.src_pkg_name)
+                        .map_err(|err| IdParseError {
+                            path: self.path.clone(),
+                            line_no,
+                            id_string: id.to_string(),
+                            parse_error: err,
+                        })?;
+
+                    let anim = g.get(2).unwrap().as_str();
+                    let palette = g.get(3).unwrap().as_str();
+
+                    match id.resolve(sprites) {
+                        Some(sprite) => Ok(format!(
+                            "00{index:02X}{palette:02X}{anim:02X}",
+                            index = sprite
+                                .assembled_index()
+                                .expect("unassembled sprite"),
+                            anim = sprite.animation_by_name(anim)
+                                .ok_or_else(|| SpriteLacksAnimation {
+                                    path: self.path.clone(),
+                                    line_no,
+                                    id: id.clone(),
+                                    animation: anim.to_string(),
+                                })?,
+                            palette = sprite.palette_by_name(anim)
+                                .ok_or_else(|| SpriteLacksPalette {
+                                    path: self.path.clone(),
+                                    line_no,
+                                    id,
+                                    palette: palette.to_string(),
+                                })?
+                        )),
+                        None => Err(UnknownSprite { path: self.path.clone(), line_no, id }),
+                    }
                 })?;
 
                 // {String:id}
@@ -243,8 +321,6 @@ impl Script {
 
 #[derive(Error, Debug)]
 pub enum ResolveError {
-    // TODO: display errors with original script paths, shortened (components before 'src' removed)
-
     #[error("{path}:{line_no}: failed to parse id '{id_string}': {parse_error}")]
     IdParseError {
         path: PathBuf,
@@ -260,6 +336,22 @@ pub enum ResolveError {
         path: PathBuf,
         line_no: usize,
         id: SpriteId,
+    },
+
+    #[error("{path}:{line_no}: sprite {id:#?} has no animation '{animation}'")]
+    SpriteLacksAnimation {
+        path: PathBuf,
+        line_no: usize,
+        id: SpriteId,
+        animation: String,
+    },
+
+    #[error("{path}:{line_no}: sprite {id:#?} has no palette '{palette}'")]
+    SpriteLacksPalette {
+        path: PathBuf,
+        line_no: usize,
+        id: SpriteId,
+        palette: String,
     },
 
     #[error("{path}:{line_no}: unknown string: {id:#?}")]

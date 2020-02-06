@@ -175,7 +175,8 @@ impl Package {
         if sprites_dir.is_dir() {
             for entry in sprites_dir.read_dir().unwrap() {
                 let dir = entry.unwrap().path();
-                let sprite = Sprite::load(pkg.name(), dir);
+                let sprite = Sprite::load(pkg.name(), &dir)
+                    .with_context(|| format!("unable to load sprite: {}", dir.display()))?;
 
                 let id = SpriteId::identify(&pkg, &sprite);
                 info!("loaded {:?}", &id);

@@ -9,14 +9,21 @@ Scripts can reference exports using `{...}` syntax. These are replaced at assemb
 Note that Star Rod has some of its own also, but these expressions do not refer to starpkg exports.
 
 ### `{String:identifier}`
-Resolves to the ID of the given string in the form `00XX0YYY`, where `XX` is the string section and
+Expands to the ID of the given string in the form `00XX0YYY`, where `XX` is the string section and
 `YYY` is string's index within that section.
 
 This feature only works for named, exported strings, not `$Pointer` strings defined within scripts,
 and it supercedes Star Rod's `{String:name}` syntax.
 
 ### `{Sprite:identifier}`
-Resolves to the numeric index of the given sprite, padded to two hex digits.
+Expands to the numeric index of the given sprite, padded to two hex digits.
+
+### `{Sprite:identifier:animation}
+Expands to `00II00AA`, ie. the value representing the given sprite performing the given animation.
+
+### `{Sprite:identifier:animation:palette}
+Expands to `00IIPPAA`, ie. the value representing the given sprite performing the given animation
+with the given palette.
 
 ### `{Actor:identifier}`
-Resolves to the numeric index of the given actor, padded to two hex digits.
+Expands to the numeric index of the given actor, padded to two hex digits.
