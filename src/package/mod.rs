@@ -449,7 +449,7 @@ fn relative_path_to(target: &Path) -> io::Result<PathBuf> {
         .collect();
 
     // We need to back up from the current directory to get to `prefix`:
-    let parent_count = prefix.len() - pwd.components().count();
+    let parent_count = pwd.components().count() - prefix.len();
     let parents = combine_path_components(vec![Component::ParentDir; parent_count]);
 
     // Find the path we must take in order to get from `prefix` to `target`.
