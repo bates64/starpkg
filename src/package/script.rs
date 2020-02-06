@@ -257,7 +257,7 @@ impl Script {
                                     id: id.clone(),
                                     animation: anim.to_string(),
                                 })?,
-                            palette = sprite.palette_by_name(anim)
+                            palette = sprite.palette_by_name(palette)
                                 .ok_or_else(|| SpriteLacksPalette {
                                     path: self.path.clone(),
                                     line_no,
