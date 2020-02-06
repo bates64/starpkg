@@ -1,0 +1,25 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://github.com/nanaian/starpkg
+options:
+  commits:
+    filters:
+      Type:
+        - feat
+        - fix
+        - perf
+        - improvement
+  commit_groups:
+    title_maps:
+      feat: Features
+      improvement: Improvements
+      fix: Fixes
+      perf: Performance
+  header:
+    pattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - Scope
+      - Subject

@@ -14,30 +14,23 @@ productive modder.
 >
 > On Windows, we recommend you use PowerShell rather than Command Prompt.
 
-### Installing on Linux
+### Installing on Linux, macOS, or WSL
 
-If you're using Linux or [Windows Subsystem for Linux][wsl], execute the following command:
+If you're using Linux, macOS, or [Windows Subsystem for Linux][wsl], execute the following command
+in a terminal:
 
 ```sh
-$ curl -sSLf "https://gist.githubusercontent.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6/raw/starpkg-linux.sh" | sh
+$ curl -sSLf "https://git.io/JvZKc" | sh
 ```
 
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
-
-### Installing on macOS
-
-If you're using macOS, open Terminal and execute the following command:
-
-```sh
-$ curl -sSLf "https://gist.githubusercontent.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6/raw/starpkg-macos.sh" | sh
-```
 
 ### Installing on Windows
 
 If you're using Windows, open PowerShell and execute the following command:
 
 ```sh
-$ iex ((New-Object System.Net.WebClient).DownloadString('https://gist.githubusercontent.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6/raw/starpkg-windows.ps1'))
+$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvZKl'))
 ```
 
 ### Building from source

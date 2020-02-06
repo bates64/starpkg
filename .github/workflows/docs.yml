@@ -1,16 +1,21 @@
+# TODO: docs versioning
+# i.e. https://imalex.xyz/starpkg/latest -> docs built from latest release
+#      https://imalex.xyz/starpkg/vX.Y.Z -> docs built from release X.Y.Z
+
 on:
   push:
     branches:
       - master
+    paths:
+      - 'docs/**'
 
-name: Publish documentation
+name: Docs
 
 jobs:
-  build-deploy:
+  deploy_docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v1
