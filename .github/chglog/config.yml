@@ -1,7 +1,6 @@
 style: github
 template: CHANGELOG.tpl.md
 info:
-  title: CHANGELOG
   repository_url: https://github.com/nanaian/starpkg
 options:
   commits:
@@ -23,3 +22,6 @@ options:
       - Type
       - Scope
       - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGE
