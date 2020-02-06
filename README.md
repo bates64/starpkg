@@ -1,8 +1,9 @@
 # 📦 starpkg
 
-[![Release](https://img.shields.io/github/downloads/nanaian/starpkg/total?logo=github)](https://github.com/nanaian/starpkg/releases/latest)
+[![Build](https://img.shields.io/github/workflow/status/nanaian/starpkg/Push/master)](https://github.com/nanaian/starpkg/actions)
+[![Crate](https://img.shields.io/crates/v/starpkg?label=release)](https://crates.io/crates/starpkg)
+[![Downloads](https://img.shields.io/github/downloads/nanaian/starpkg/total)](https://github.com/nanaian/starpkg/releases/latest)
 [![Documentation](https://img.shields.io/static/v1?label=docs&message=online&color=blue)](https://imalex.xyz/starpkg)
-[![Crate](https://img.shields.io/crates/v/starpkg)](https://crates.io/crates/starpkg)
 [![Discord Channel](https://img.shields.io/discord/279322074412089344?color=7289DA&logo=discord&logoColor=fff)](https://discord.gg/xzq6egG)
 [![License](https://img.shields.io/github/license/nanaian/starpkg)](https://github.com/nanaian/starpkg/blob/master/LICENSE)
 
