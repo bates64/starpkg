@@ -456,7 +456,7 @@ fn relative_path_to(target: &Path) -> io::Result<PathBuf> {
     let to_target = target.strip_prefix(combine_path_components(prefix)).unwrap();
 
     // Join these to find the relative path from the current working directory to `target`!
-    Ok(PathBuf::from(parents.join(to_target)))
+    Ok(parents.join(to_target))
 }
 
 /// Converts a Vec<Component> to a PathBuf. No idea why the standard library doesn't support this.

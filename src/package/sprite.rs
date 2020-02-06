@@ -44,9 +44,9 @@ pub struct Sprite {
 impl Sprite {
     pub fn load(_: &str, dir: &Path) -> Result<Sprite, SpriteLoadError> {
         let spritesheet = fs::read_to_string(dir.join("SpriteSheet.xml"))
-            .map_err(|err| SpriteLoadError::MissingSpriteSheet(err))?;
+            .map_err(SpriteLoadError::MissingSpriteSheet)?;
         let spritesheet = roxmltree::Document::parse(&spritesheet)
-            .map_err(|err| SpriteLoadError::MalformedSpriteSheet(err))?;
+            .map_err(SpriteLoadError::MalformedSpriteSheet)?;
 
         Ok(Sprite {
             palettes: spritesheet
