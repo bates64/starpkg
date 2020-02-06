@@ -62,7 +62,7 @@ fn main() {
         error!("{}", chain.next().unwrap());
 
         for cause in chain {
-            println!("       {}", Color::Fixed(8).normal().paint(format!("{}", cause)));
+            trace!("{}", Color::Fixed(8).normal().paint(format!("{}", cause)));
         }
 
         std::process::exit(1);
