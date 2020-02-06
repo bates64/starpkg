@@ -6,7 +6,7 @@ use crate::package::Package;
 
 #[derive(Debug)]
 pub struct CommandContext {
-    pub package: Result<Package, TaggedError>,
+    package: Result<Package, TaggedError>,
 }
 
 /// If the package could not be read, we also remember the path it was supposed to be at.
@@ -21,8 +21,6 @@ pub struct TaggedError {
 
 impl CommandContext {
     pub fn new(package_dir: Option<PathBuf>) -> CommandContext {
-        let current_dir = std::env::current_dir().unwrap();
-
         CommandContext {
             package: match package_dir {
                 Some(path) => Package::load(&path)
@@ -30,12 +28,15 @@ impl CommandContext {
                         dir: path.to_owned(),
                         source: err.into(),
                     }),
-                None => Package::find(&current_dir)
-                    .map_err(|err| TaggedError {
-                        dir: current_dir,
-                        source: err.into(),
-                    }),
-            }
+                None => {
+                    let current_dir = std::env::current_dir().unwrap();
+                    Package::find(&current_dir)
+                        .map_err(|err| TaggedError {
+                            dir: current_dir,
+                            source: err.into(),
+                        })
+                },
+            },
         }
     }
 

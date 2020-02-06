@@ -102,6 +102,11 @@ impl Package {
             return Err(LoadError::NotDirectory(dir.to_owned()));
         }
 
+        let dir = relative_path_to(dir)
+            .map_err(|err| LoadError::Other(err.into()))?;
+
+        debug!("loading package: {}", dir.display());
+
         // Read starpkg.toml.
         let manifest: Manifest = {
             let string = fs::read_to_string(dir.join("starpkg.toml"))
@@ -112,7 +117,7 @@ impl Package {
 
         // Load all dependencies into a flat vec.
         let mut deps = manifest
-            .load_dependencies(dir)?
+            .load_dependencies(&dir)?
             .into_iter()
             .fold(Vec::new(), |mut deps, mut dep| {
                 deps.append(&mut dep.dependencies);
@@ -143,7 +148,7 @@ impl Package {
         }
 
         let mut pkg = Package {
-            dir: dir.to_owned(),
+            dir: dir.clone(),
 
             manifest,
 
@@ -213,7 +218,7 @@ impl Package {
         Ok(pkg)
     }
 
-    /// Traverses upwards from the give root path, looking for the first package we see.
+    /// Traverses upwards from the given root path, looking for the first package we see.
     pub fn find(root: &Path) -> Result<Package, FindError> {
         // Make the root path absolute.
         let mut path = root.canonicalize()
@@ -423,6 +428,49 @@ pub enum FindError {
 
     #[error(transparent)]
     LoadError(#[from] LoadError),
+}
+
+/// Finds the relative path to the given target path from the current working directory.
+fn relative_path_to(target: &Path) -> io::Result<PathBuf> {
+    use std::path::Component;
+
+    // Canonicalize (make absolute) both paths so we can compare them properly.
+    // This also normalizes weird Windows-only behaviour where paths begin with a special prefix
+    // that says "this is a very long path" - we can compare paths only if they *both* have it.
+    let target = target.canonicalize()?;
+    let pwd = std::env::current_dir()?.canonicalize()?;
+
+    // Find the common prefix of `target` and the current working directory.
+    let prefix: Vec<Component> = pwd.components()
+        .zip(target.components())
+        .take_while(|(a, b)| a == b)
+        .map(|(a, _)| a)
+        .collect();
+
+    // We need to back up from the current directory to get to `prefix`:
+    let parent_count = prefix.len() - pwd.components().count();
+    let parents = combine_path_components(vec![Component::ParentDir; parent_count]);
+
+    // Find the path we must take in order to get from `prefix` to `target`.
+    let to_target = target.strip_prefix(combine_path_components(prefix)).unwrap();
+
+    // Join these to find the relative path from the current working directory to `target`!
+    Ok(PathBuf::from(parents.join(to_target)))
+}
+
+/// Converts a Vec<Component> to a PathBuf. No idea why the standard library doesn't support this.
+fn combine_path_components(components: Vec<std::path::Component>) -> PathBuf {
+    let mut buf = PathBuf::from(".");
+
+    for component in components {
+        if let std::path::Component::CurDir = component {
+            continue
+        }
+
+        buf.push(component);
+    }
+
+    buf
 }
 
 /// A starpkg.toml.
