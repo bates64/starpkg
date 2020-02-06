@@ -2,13 +2,17 @@
 
 on:
   push:
-    paths-ignore:
-      - "docs/**"
-      - "*.md"
+    paths:
+      - "Cargo.toml"
+      - "src/**"
+      - "tests/**"
+      - ".github/**"
   pull_request:
-    paths-ignore:
-      - "docs/**"
-      - "*.md"
+    paths:
+      - "Cargo.toml"
+      - "src/**"
+      - "tests/**"
+      - ".github/**"
 
 name: Push
 
