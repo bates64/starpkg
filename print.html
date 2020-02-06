@@ -357,14 +357,19 @@ as in Star Rod (ie. <code>mscr</code>/<code>bscr</code> files), albeit with a fe
 <p>Scripts can reference exports using <code>{...}</code> syntax. These are replaced at assembly time.
 Note that Star Rod has some of its own also, but these expressions do not refer to starpkg exports.</p>
 <h3><a class="header" href="#stringidentifier" id="stringidentifier"><code>{String:identifier}</code></a></h3>
-<p>Resolves to the ID of the given string in the form <code>00XX0YYY</code>, where <code>XX</code> is the string section and
+<p>Expands to the ID of the given string in the form <code>00XX0YYY</code>, where <code>XX</code> is the string section and
 <code>YYY</code> is string’s index within that section.</p>
 <p>This feature only works for named, exported strings, not <code>$Pointer</code> strings defined within scripts,
 and it supercedes Star Rod’s <code>{String:name}</code> syntax.</p>
 <h3><a class="header" href="#spriteidentifier" id="spriteidentifier"><code>{Sprite:identifier}</code></a></h3>
-<p>Resolves to the numeric index of the given sprite, padded to two hex digits.</p>
+<p>Expands to the numeric index of the given sprite, padded to two hex digits.</p>
+<h3><a class="header" href="#spriteidentifieranimation" id="spriteidentifieranimation">`{Sprite:identifier:animation}</a></h3>
+<p>Expands to <code>00II00AA</code>, ie. the value representing the given sprite performing the given animation.</p>
+<h3><a class="header" href="#spriteidentifieranimationpalette" id="spriteidentifieranimationpalette">`{Sprite:identifier:animation:palette}</a></h3>
+<p>Expands to <code>00IIPPAA</code>, ie. the value representing the given sprite performing the given animation
+with the given palette.</p>
 <h3><a class="header" href="#actoridentifier" id="actoridentifier"><code>{Actor:identifier}</code></a></h3>
-<p>Resolves to the numeric index of the given actor, padded to two hex digits.</p>
+<p>Expands to the numeric index of the given actor, padded to two hex digits.</p>
 
                     </main>
 
