@@ -40,7 +40,3 @@ $ cargo mdbook serve
 - `git add -A && git commit -m "chore(release): [VERSION]"`
 - `git tag v[VERSION]`
 - `git push && git push --tags`
-
-The install script gist can be found [here][install-gist].
-
-[install-gist]: https://gist.github.com/nanaian/cf9ca4e645d8b7b1951c42d2b9c6f2f6

@@ -20,7 +20,7 @@ If you're using Linux, macOS, or [Windows Subsystem for Linux][wsl], execute the
 in a terminal:
 
 ```sh
-$ curl -sSLf "https://git.io/JvZKc" | sh
+$ curl -sSLf "https://git.io/Jvnqr" | sh
 ```
 
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
@@ -30,7 +30,7 @@ $ curl -sSLf "https://git.io/JvZKc" | sh
 If you're using Windows, open PowerShell and execute the following command:
 
 ```sh
-$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvZKl'))
+$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvnqK))
 ```
 
 ### Building from source
