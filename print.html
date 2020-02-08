@@ -203,11 +203,11 @@ the start of a command. Lines without a <code>$</code> are typically the output 
 <h3><a class="header" href="#installing-on-linux-macos-or-wsl" id="installing-on-linux-macos-or-wsl">Installing on Linux, macOS, or WSL</a></h3>
 <p>If you’re using Linux, macOS, or <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows Subsystem for Linux</a>, execute the following command
 in a terminal:</p>
-<pre><code class="language-sh">$ curl -sSLf &quot;https://git.io/Jvnqr&quot; | sh
+<pre><code class="language-terminal">$ curl -sSLf &quot;https://git.io/Jvnqr&quot; | sh
 </code></pre>
 <h3><a class="header" href="#installing-on-windows" id="installing-on-windows">Installing on Windows</a></h3>
 <p>If you’re using Windows, open PowerShell and execute the following command:</p>
-<pre><code class="language-sh">$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvnqK))
+<pre><code class="language-terminal">$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvnqK))
 </code></pre>
 <h3><a class="header" href="#building-from-source" id="building-from-source">Building from source</a></h3>
 <p>If the above methods don’t work on your OS for whatever reason, you can compile starpkg yourself:</p>
@@ -218,7 +218,7 @@ in a terminal:</p>
 <h3><a class="header" href="#updating-and-uninstalling" id="updating-and-uninstalling">Updating and uninstalling</a></h3>
 <p>The commands above can also be used to update starpkg to the latest version. You can check the
 version you have installed with <code>starpkg --version</code>:</p>
-<pre><code class="language-sh">$ starpkg --version
+<pre><code class="language-terminal">$ starpkg --version
 starpkg 0.2.0
 </code></pre>
 <p>To uninstall starpkg, delete the <code>~/.starpkg</code> directory (on Windows, this is
@@ -230,7 +230,7 @@ starpkg 0.2.0
 <p>Lets make a basic mod! In starpkg, mods are called <em>packages</em>.</p>
 <h2><a class="header" href="#making-a-new-package-directory-with-starpkg-new" id="making-a-new-package-directory-with-starpkg-new">Making a new package directory with <code>starpkg new</code></a></h2>
 <p>To create a new package, run <code>starpkg new &lt;name of package&gt;</code> in an empty directory:</p>
-<pre><code class="language-text">$ mkdir first_package
+<pre><code class="language-terminal">$ mkdir first_package
 $ cd first_package
 
 $ starpkg new first_package
@@ -270,7 +270,7 @@ these are referred to as <em>exports</em>.</p>
 <p>The <code>starpkg build</code> command assembles the package and its dependencies into a Star Rod ‘mod
 folder.’ In the future, this command will also have Star Rod compile the mod folder into a working
 modded <em>Paper Mario</em> rom.</p>
-<pre><code>$ starpkg build
+<pre><code class="language-terminal">$ starpkg build
 info: assembled first_package v0.1.0 in 0.00458s
 </code></pre>
 <p>If you’re interested, you can view the mod folder that starpkg builds by viewing the created
