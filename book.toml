@@ -9,3 +9,4 @@ src = "docs"
 curly-quotes = true
 no-section-label = false
 git-repository-url = "https://github.com/nanaian/starpkg"
+theme = "docs/theme"

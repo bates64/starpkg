@@ -6,7 +6,7 @@ Lets make a basic mod! In starpkg, mods are called _packages_.
 
 To create a new package, run `starpkg new <name of package>` in an empty directory:
 
-```text
+```terminal
 $ mkdir first_package
 $ cd first_package
 
@@ -64,7 +64,7 @@ The `starpkg build` command assembles the package and its dependencies into a St
 folder.' In the future, this command will also have Star Rod compile the mod folder into a working
 modded _Paper Mario_ rom.
 
-```
+```terminal
 $ starpkg build
 info: assembled first_package v0.1.0 in 0.00458s
 ```

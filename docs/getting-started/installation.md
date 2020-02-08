@@ -19,7 +19,7 @@ productive modder.
 If you're using Linux, macOS, or [Windows Subsystem for Linux][wsl], execute the following command
 in a terminal:
 
-```sh
+```terminal
 $ curl -sSLf "https://git.io/Jvnqr" | sh
 ```
 
@@ -29,7 +29,7 @@ $ curl -sSLf "https://git.io/Jvnqr" | sh
 
 If you're using Windows, open PowerShell and execute the following command:
 
-```sh
+```terminal
 $ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvnqK))
 ```
 
@@ -45,7 +45,7 @@ If the above methods don't work on your OS for whatever reason, you can compile 
 The commands above can also be used to update starpkg to the latest version. You can check the
 version you have installed with `starpkg --version`:
 
-```sh
+```terminal
 $ starpkg --version
 starpkg 0.2.0
 ```
