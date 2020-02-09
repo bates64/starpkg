@@ -27,11 +27,11 @@ hljs.registerLanguage('terminal', () => {
                 end: /\n/,
                 contains: [
                     {
-                        className: 'built_in',
+                        className: 'strong',
                         begin: /(cd|mkdir|curl|sh|iex)/,
                     },
                     {
-                        className: 'symbol',
+                        className: 'terminal-starpkg',
                         begin: 'starpkg',
                     },
                     {
