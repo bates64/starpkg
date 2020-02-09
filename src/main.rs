@@ -85,8 +85,3 @@ fn try_main() -> Result<()> {
         Command::Build(cmd_opt) => cmd::build::run(ctx, cmd_opt),
     }
 }
-
-#[test]
-fn it_works() {
-    // Ok!
-}
