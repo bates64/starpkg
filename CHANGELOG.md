@@ -1,3 +1,4 @@
+## 0.5.0
 - Added _private exports_! Any export name beginning with `_` will be considered private to the
   package which owns it. Packages may not directly reference the private exports of their
   dependencies.
