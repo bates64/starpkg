@@ -7,5 +7,6 @@
     "editor.rulers": [
         100
     ],
-    "rust.clippy_preference": "on"
+    "rust.clippy_preference": "on",
+    "javascript.validate.enable": false
 }

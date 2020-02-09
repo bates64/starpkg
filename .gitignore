@@ -2,3 +2,5 @@
 **/*.rs.bk
 /book
 /index.html
+/node_modules
+/package-lock.json
