@@ -13,7 +13,7 @@ next major release of starpkg.
 For commit scopes, prefer using the name of a starpkg subcommand, eg. `new`, if relevant.
 
 Changelogs are generated with [git-chglog](https://github.com/git-chglog/git-chglog) upon release.
-Only some commit types (`feat`, `fix`, `pref`, `improvement`) will be shown in release changelogs.
+Only some commit types (`feat`, `fix`, `pref`, `improve`) will be shown in release changelogs.
 
 ## Linting
 

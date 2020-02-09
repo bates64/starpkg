@@ -9,11 +9,11 @@ options:
         - feat
         - fix
         - perf
-        - improvement
+        - improve
   commit_groups:
     title_maps:
       feat: Features
-      improvement: Improvements
+      improve: Improvements
       fix: Fixes
       perf: Performance
   header:
