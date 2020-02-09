@@ -2,8 +2,9 @@
     "private": true,
     "husky": {
         "hooks": {
-            "pre-commit": "cargo test",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+            "pre-commit": "cargo clippy",
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+            "pre-push": "cargo test"
         }
     },
     "devDependencies": {
