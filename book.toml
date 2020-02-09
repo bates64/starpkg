@@ -1,7 +1,7 @@
 [book]
 title = "starpkg user guide"
 author = "Alex Bates"
-description = "A tool for creating composable Paper Mario mods."
+description = "Create composable Paper Mario mods"
 language = "en"
 src = "docs"
 

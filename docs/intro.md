@@ -1,7 +1,4 @@
-# Introduction
-
-[📦 starpkg](https://github.com/nanaian/starpkg) is a tool for creating composable _Paper Mario_
-mods.
+![Banner](banner.svg)
 
 ## The current asset-sharing story
 
