@@ -12,8 +12,7 @@ next major release of starpkg.
 
 For commit scopes, prefer using the name of a starpkg subcommand, eg. `new`, if relevant.
 
-Changelogs are generated with [git-chglog](https://github.com/git-chglog/git-chglog) upon release.
-Only some commit types (`feat`, `fix`, `pref`, `improve`) will be shown in release changelogs.
+**If you make a user-facing change, make sure to add it to the changelog!**
 
 ## Linting
 
@@ -37,6 +36,7 @@ $ cargo mdbook serve
 ## Releases
 
 - Bump [Cargo.toml](Cargo.toml) version according to [semver](https://semver.org/spec/v2.0.0.html)
+- Prepend `## [VERSION]` to `CHANGELOG.md`
 - `git add -A && git commit -m "chore(release): [VERSION]"`
 - `git tag v[VERSION]`
 - `git push && git push --tags`
