@@ -48,17 +48,17 @@ jobs:
         with:
           command: test
 
-      - run: sudo apt-get install libssl-dev pkg-config cmake zlib1g-dev --y
-
       - name: Install tarpaulin
-        uses: actions-rs/cargo@v1
-        with:
-          command: install cargo-tarpaulin
+        run: |
+          sudo apt-get install libssl-dev pkg-config cmake zlib1g-dev -y
+          cargo install cargo-tarpaulin
 
       - name: Upload coverage to Codecov
         run: |
           cargo tarpaulin --out Xml
           bash <(curl -s https://codecov.io/bash)
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   cargo_clippy:
     name: Cargo clippy
