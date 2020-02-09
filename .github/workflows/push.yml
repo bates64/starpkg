@@ -42,9 +42,23 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - uses: actions-rs/cargo@v1
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
         with:
           command: test
+
+      - run: sudo apt-get install libssl-dev pkg-config cmake zlib1g-dev --y
+
+      - name: Install tarpaulin
+        uses: actions-rs/cargo@v1
+        with:
+          command: install cargo-tarpaulin
+
+      - name: Upload coverage to Codecov
+        run: |
+          cargo tarpaulin --out Xml
+          bash <(curl -s https://codecov.io/bash)
 
   cargo_clippy:
     name: Cargo clippy
