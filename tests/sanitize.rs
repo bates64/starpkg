@@ -22,6 +22,7 @@ fn bad_package_name() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()
@@ -41,6 +42,7 @@ fn no_pkg_name() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()
@@ -60,6 +62,7 @@ fn pkg_name_pm64() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()
@@ -82,6 +85,7 @@ fn bad_dependency_name() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()
@@ -104,6 +108,7 @@ fn dep_name_same_as_pkg_name() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()
@@ -128,6 +133,7 @@ fn bad_export_name_string() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()
@@ -167,6 +173,7 @@ fn using_private_export_locally() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .success();
@@ -213,6 +220,7 @@ fn no_using_private_export_externally() {
 
     starpkg()
         .arg("build")
+        .arg("--no-compile")
         .current_dir(dir.path())
         .assert()
         .failure()

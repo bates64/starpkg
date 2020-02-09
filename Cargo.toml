@@ -20,6 +20,8 @@ regex = "1"
 lazy_static = "1.4"
 roxmltree = "0.9"
 indoc = "0.3"
+dirs = "2"
+duct = "0.13"
 
 # Logging
 log = { version = "^0.4.1", features = [ "std" ] }

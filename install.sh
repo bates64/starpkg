@@ -1,4 +1,3 @@
-
 mkdir -p ~/.starpkg
 
 platform="$(uname -s | tr '[:upper:]' '[:lower:]')"

@@ -25,10 +25,20 @@ mod logger;
 mod cmd;
 mod package;
 mod sanitize;
+mod starrod;
 
 use prelude::*;
 use std::path::PathBuf;
 use structopt::{StructOpt, clap::AppSettings::*};
+
+lazy_static! {
+    /// The path of the starpkg install directory (typically `~/.starpkg`).
+    pub static ref INSTALL_DIR: PathBuf = std::env::current_exe()
+        .unwrap()
+        .parent()
+        .unwrap()
+        .to_path_buf();
+}
 
 /// A tool for creating composable Paper Mario mods.
 #[derive(StructOpt, Debug)]
@@ -37,11 +47,11 @@ struct Opt {
     #[structopt(subcommand)]
     cmd: Command,
 
-    /// Path to package directory
+    /// Path to package directory/.
     #[structopt(short = "d", long = "dir", parse(from_os_str))]
     package: Option<PathBuf>,
 
-    /// Verbosity level (-v: debug, -vv: trace)
+    /// Verbosity level (-v: debug, -vv: trace).
     #[structopt(short = "v", parse(from_occurrences))]
     verbosity: usize,
 }

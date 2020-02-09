@@ -30,7 +30,7 @@ $ curl -sSLf "https://git.io/Jvnqr" | sh
 If you're using Windows, open PowerShell and execute the following command:
 
 ```terminal
-$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvnqK))
+$ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/JvnqK'))
 ```
 
 ### Building from source
