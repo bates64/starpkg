@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::sanitize;
 use super::Package;
 use std::collections::HashMap;
 
@@ -55,13 +56,31 @@ pub trait Identify : std::hash::Hash + Sized + Eq {
         }
 
         Ok(if string.contains('/') {
-            let mut it = string.splitn(1, '/');
+            let split: Vec<&str> = string.splitn(2, '/').collect();
 
-            Self::new(it.next().unwrap(), match it.next() {
-                Some(pkg_name) => Ok(pkg_name),
-                None => Err(ParseError::NameRequired),
-            }?)
+            let pkg_name = split[0];
+            let export_name = match split.get(1) {
+                Some(export_name) => export_name,
+                None => return Err(ParseError::NameRequired(string.to_string())),
+            };
+
+            sanitize::dependency_name(pkg_name, source_pkg_name)
+                .map_err(|error| match error {
+                    sanitize::DependencyNameError::SameAsCurrentPackage { .. } => {
+                        ParseError::PackageNameUnneeded(string.to_string())
+                    },
+                    _ => ParseError::DependencyNameError(error),
+                })?;
+
+            sanitize::export_name(export_name)?;
+
+            if export_name.starts_with('_') {
+                return Err(ParseError::Private((*export_name).to_string()));
+            }
+
+            Self::new(pkg_name, export_name)
         } else {
+            sanitize::export_name(string)?;
             Self::new(source_pkg_name, string)
         })
     }
@@ -69,9 +88,21 @@ pub trait Identify : std::hash::Hash + Sized + Eq {
 
 #[derive(Error, Debug)]
 pub enum ParseError {
-    #[error("identifier is empty")]
+    #[error("identifier cannot be empty")]
     Empty,
 
-    #[error("export name required after the '/'")]
-    NameRequired,
+    #[error("identifier '{0}' requires an export name after the slash")]
+    NameRequired(String),
+
+    #[error("identifier '{0}' references a private export")]
+    Private(String),
+
+    #[error("identifier '{0}' needlessly references the current package explicitly")]
+    PackageNameUnneeded(String),
+
+    #[error(transparent)]
+    DependencyNameError(#[from] sanitize::DependencyNameError),
+
+    #[error(transparent)]
+    ExportNameError(#[from] sanitize::ExportNameError),
 }

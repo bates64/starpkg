@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::sanitize;
 use super::Package;
 use super::id::{Identify, Identifier};
 use super::script::Script;
@@ -54,16 +55,18 @@ impl Actor {
         let manifest: Manifest = toml::from_str(&toml)
             .with_context(|| format!("parse error in actor manifest '{}.toml'", name))?;
 
-        Ok(Actor {
-            name: TextId::parse(&manifest.name, src_pkg_name)
-                .with_context(|| format!("actor '{}' name text identifier is malformed", name))?,
-            tattle: TextId::parse(&manifest.tattle, src_pkg_name)
-                .with_context(|| format!("actor '{}' tattle text identifier is malformed", name))?,
+        let actor = Actor {
+            name: TextId::parse(&manifest.name, src_pkg_name)?,
+            tattle: TextId::parse(&manifest.tattle, src_pkg_name)?,
 
             dir,
             src_pkg_name: src_pkg_name.to_owned(),
             assembled_index: None,
-        })
+        };
+
+        sanitize::export_name(&actor.name())?;
+
+        Ok(actor)
     }
 
     pub fn name(&self) -> String {

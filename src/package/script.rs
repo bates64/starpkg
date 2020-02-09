@@ -408,6 +408,14 @@ impl Block {
             lines,
         })
     }
+
+    pub fn start_line(&self) -> usize {
+        self.lines[0].0
+    }
+
+    pub fn end_line(&self) -> usize {
+        self.lines.last().unwrap().0
+    }
 }
 
 #[derive(Debug)]

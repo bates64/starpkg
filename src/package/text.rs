@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::sanitize;
 use super::Package;
 use super::id::{Identify, Identifier};
 use super::script::{Script, BlockKind};
@@ -38,22 +39,34 @@ pub struct Text {
 }
 
 impl Text {
-    pub fn load_many(src_pkg_name: &str, str_file_path: PathBuf) -> Result<Vec<Text>> {
-        Script::load(src_pkg_name, str_file_path)?.blocks
+    pub fn load_many(src_pkg_name: &str, str_file_path: PathBuf) -> Result<Vec<Text>, LoadError> {
+        Script::load(src_pkg_name, str_file_path.clone())?.blocks
             .into_iter()
-            .map(|block| match block.kind {
-                BlockKind::StringNamed { section, name } => Ok(Text {
-                    section,
-                    name,
-                    string: block.lines
-                        .into_iter()
-                        .skip(1)
-                        .map(|(_, line)| line)
-                        .collect::<Vec<String>>()
-                        .join("\n"),
-                    assembled_index: None,
+            .map(|block| match &block.kind {
+                BlockKind::StringNamed { section, name } => {
+                    sanitize::export_name(&name)
+                        .map_err(|error| LoadError::BadName {
+                            file: str_file_path.clone(),
+                            line: block.start_line(),
+                            error,
+                        })?;
+
+                    Ok(Text {
+                        section: section.to_owned(),
+                        name: name.to_owned(),
+                        string: block.lines
+                            .into_iter()
+                            .skip(1)
+                            .map(|(_, line)| line)
+                            .collect::<Vec<String>>()
+                            .join("\n"),
+                        assembled_index: None,
+                    })
+                },
+                _ => Err(LoadError::DisallowedBlockKind {
+                    file: str_file_path.clone(),
+                    line: block.start_line(),
                 }),
-                _ => Err(anyhow!("only `#string:XX:(id)` blocks allowed in text exports")),
             })
             .collect()
     }
@@ -85,4 +98,24 @@ impl Text {
 
         Ok(())
     }
+}
+
+#[derive(Error, Debug)]
+pub enum LoadError {
+    #[error("{file}:{line}: only `#string XX:(export_name)` blocks allowed in string files")]
+    DisallowedBlockKind {
+        file: PathBuf,
+        line: usize,
+    },
+
+    #[error("{file}:{line}: {error}")]
+    BadName {
+        file: PathBuf,
+        line: usize,
+        #[source]
+        error: sanitize::ExportNameError,
+    },
+
+    #[error(transparent)]
+    Other(#[from] Error),
 }

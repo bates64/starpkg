@@ -13,3 +13,7 @@ the name of the package which provides the export.
 Export names:
 - cannot contain punctuation other than underscores
 - must be unique in its export type group of packages, ie. a package cannot define two sprites named the same, but may name a string and an actor the same
+
+To make an export private to only the package defining it, prefix its name with an underscore. This
+works because [reference expressions](scripts.md#reference-expressions) disallow referencing exports
+with underscores outside the current package.

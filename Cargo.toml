@@ -19,6 +19,7 @@ structopt = "0.3"
 regex = "1"
 lazy_static = "1.4"
 roxmltree = "0.9"
+indoc = "0.3"
 
 # Logging
 log = { version = "^0.4.1", features = [ "std" ] }

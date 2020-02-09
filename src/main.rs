@@ -24,6 +24,7 @@ mod prelude {
 mod logger;
 mod cmd;
 mod package;
+mod sanitize;
 
 use prelude::*;
 use std::path::PathBuf;

@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::sanitize;
 use super::Package;
 use super::id::{Identify, Identifier};
 
@@ -48,7 +49,7 @@ impl Sprite {
         let spritesheet = roxmltree::Document::parse(&spritesheet)
             .map_err(SpriteLoadError::MalformedSpriteSheet)?;
 
-        Ok(Sprite {
+        let spr = Sprite {
             palettes: spritesheet
                 .root_element()
                 .children()
@@ -79,7 +80,11 @@ impl Sprite {
 
             dir: dir.to_owned(),
             assembled_index: 0,
-        })
+        };
+
+        sanitize::export_name(&spr.name())?;
+
+        Ok(spr)
     }
 
     pub fn name(&self) -> String {
@@ -135,6 +140,9 @@ pub enum SpriteLoadError {
     #[error("SpriteSheet.xml is missing PaletteList")]
     SpriteSheetMissingPaletteList,
 
-    #[error("SpriteSheet.xml is missing PaletteList")]
+    #[error("SpriteSheet.xml is missing AnimationList")]
     SpriteSheetMissingAnimationList,
+
+    #[error(transparent)]
+    BadName(#[from] sanitize::ExportNameError),
 }

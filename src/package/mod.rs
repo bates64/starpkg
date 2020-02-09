@@ -8,6 +8,7 @@ mod text;
 mod actor;
 
 use crate::prelude::*;
+use crate::sanitize;
 use std::collections::HashMap;
 use id::Identify;
 use script::Script;
@@ -55,6 +56,8 @@ impl Package {
     /// Creates a new package at `dir` with the given name. If `dir` already has any files in it,
     /// the new package is placed in a subdirectory of `dir` instead.
     pub fn new(dir: &Path, name: String) -> Result<Package> {
+        sanitize::package_name(&name)?;
+
         let dir = if !dir.exists() {
             fs::create_dir_all(dir)?;
             dir.to_owned()
@@ -118,6 +121,8 @@ impl Package {
 
             toml::from_str(&string)?
         };
+
+        sanitize::package_name(&manifest.name)?;
 
         // Load all dependencies into a flat vec.
         let mut deps = manifest
@@ -208,8 +213,7 @@ impl Package {
         if texts_dir.is_dir() {
             for entry in texts_dir.read_dir().unwrap() {
                 let file = entry.unwrap().path();
-                let texts = Text::load_many(pkg.name(), file.clone())
-                    .with_context(|| format!("error parsing strings file: {}", &file.display()))?;
+                let texts = Text::load_many(pkg.name(), file.clone())?;
 
                 for text in texts {
                     let id = TextId::identify(&pkg, &text);
@@ -413,6 +417,15 @@ pub enum LoadError {
     MultiDependencyVersionMismatch,
 
     #[error(transparent)]
+    BadPackageName(#[from] sanitize::PackageNameError),
+
+    #[error(transparent)]
+    BadDependencyName(#[from] sanitize::DependencyNameError),
+
+    #[error(transparent)]
+    TextLoadError(#[from] text::LoadError),
+
+    #[error(transparent)]
     Other(#[from] Error),
 }
 
@@ -493,6 +506,8 @@ impl Manifest {
         let mut packages = Vec::new();
 
         for (name, dep) in &self.dependencies {
+            sanitize::dependency_name(&name, &self.name)?;
+
             if dep.path.is_absolute() {
                 warn!("dependency '{}' uses an absolute path", name);
             }
