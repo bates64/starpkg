@@ -62,7 +62,7 @@ fn package_exists_already() {
         .arg("test_pkg")
         .current_dir(dir.path())
         .assert()
-        .failure();
+        .success();
 }
 
 #[test]
@@ -78,6 +78,21 @@ fn custom_dir() {
         .success();
 
     dir.child("starpkg.toml").assert(predicate::path::exists());
+}
+
+#[test]
+fn dir_not_exists() {
+    let dir = tempdir();
+
+    starpkg()
+        .arg("-d")
+        .arg(dir.child("subdir").path())
+        .arg("new")
+        .arg("subdir")
+        .assert()
+        .success();
+
+    dir.child("subdir/starpkg.toml").assert(predicate::path::exists());
 }
 
 #[test]

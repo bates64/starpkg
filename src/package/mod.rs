@@ -55,22 +55,26 @@ impl Package {
     /// Creates a new package at `dir` with the given name. If `dir` already has any files in it,
     /// the new package is placed in a subdirectory of `dir` instead.
     pub fn new(dir: &Path, name: String) -> Result<Package> {
-        if dir.join("starpkg.toml").exists() {
-            return Err(anyhow!("directory {} is already a package", dir.display()))
-        }
-
         let dir = if !dir.exists() {
             fs::create_dir_all(dir)?;
             dir.to_owned()
         } else if dir.read_dir()?.count() > 0 {
+            if dir.join("starpkg.toml").exists() {
+                warn!("a package is here already - creating a subdirectory");
+            }
+
             debug!("package dir {} already has files - using subdirectory", dir.display());
 
             let subdir = dir.join(&name);
-            fs::create_dir(&subdir)?;
+            let _ = fs::create_dir(&subdir);
             subdir
         } else {
             dir.to_owned()
         };
+
+        if dir.join("starpkg.toml").exists() {
+            return Err(anyhow!("directory {} is already a package", dir.display()))
+        }
 
         let package = Package {
             dir,
