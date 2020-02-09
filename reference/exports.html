@@ -165,6 +165,9 @@ the name of the package which provides the export.</p>
 <li>cannot contain punctuation other than underscores</li>
 <li>must be unique in its export type group of packages, ie. a package cannot define two sprites named the same, but may name a string and an actor the same</li>
 </ul>
+<p>To make an export private to only the package defining it, prefix its name with an underscore. This
+works because <a href="scripts.html#reference-expressions">reference expressions</a> disallow referencing exports
+with underscores outside the current package.</p>
 
                     </main>
 
