@@ -10,9 +10,6 @@
     <a href='https://github.com/nanaian/starpkg/releases/latest'>
         <img alt='Release' src='https://img.shields.io/github/downloads/nanaian/starpkg/total'/>
     </a>
-    <a href='https://codecov.io/gh/nanaian/starpkg'>
-        <img alt='Codecov' src='https://img.shields.io/codecov/c/gh/nanaian/starpkg/master'/>
-    </a>
     <a href='https://discord.gg/xzq6egG'>
         <img alt='Discord' src='https://img.shields.io/discord/279322074412089344?color=7289DA&logo=discord&logoColor=fff'/>
     </a>
